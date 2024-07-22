@@ -19,7 +19,7 @@ export default {
 <style>
 /* 設置全局背景圖片 */
 body {
-  background: url('/src/assets/background.jpg') no-repeat center center fixed;
+  background: url('/src/assets/background2.jpg') no-repeat center center fixed;
   background-size: cover;
   margin: 0;
   font-family: Arial, sans-serif;
