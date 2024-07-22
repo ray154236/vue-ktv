@@ -8,7 +8,8 @@ import ResetPassword from '../views/ResetPassword.vue';
 import Home from '../views/Home.vue';
 import MemberProfile from '../views/MemberProfile.vue';
 import Map from '../views/Map.vue';
-
+import NewsWebsite from '../views/NewsWebsite.vue';
+import NewsShow from '../views/NewsShow.vue';
 
 // 定義路由
 const routes = [
@@ -20,6 +21,8 @@ const routes = [
     { path: '/reset-password', component: ResetPassword },//重設密碼
     { path: '/member-profile', component: MemberProfile, meta: { requiresAuth: true } },//會員基本資料
     { path: '/map', component: Map },//門市地點
+    { path: '/newswebsite', name: 'NewsWebsite', component: NewsWebsite },
+    { path: '/newsshow/:newsId', name: 'NewsShow', component: NewsShow, props: true },
 ];
 
 // 創建 router 實例
