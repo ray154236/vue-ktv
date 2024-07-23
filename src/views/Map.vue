@@ -1,20 +1,11 @@
 <template>
     <div class="map-container">
-      <div class="map-frame">
-        <iframe
-          :src="mapSrc"
-          width="100%"
-          height="400"
-          style="border:0;"
-          allowfullscreen=""
-          loading="lazy"
-        ></iframe>
-      </div>
+     
   
       <div class="content-container">
         <!-- 插入圖片 -->
         <div class="image-container">
-          <img :src="imageSrc" alt="門市圖片" />
+          <img :src="imageSrc" hidden alt="門市圖片" />
         </div>
   
         <!-- 門市資訊 -->
@@ -23,6 +14,7 @@
           <p><strong>電話:</strong> {{ phone }}</p>
           <p><strong>地址:</strong> {{ address }}</p>
           <p><strong>營業時間:</strong> {{ hours }}</p>
+          <p><strong>包廂類型:</strong> {{ room }}</p>
           <p><strong>交通資訊:</strong> {{ transportInfo }}</p>
         </div>
         
@@ -33,11 +25,9 @@
         <div v-if="isAlertVisible" class="overlay" @click.self="hideAlert">
           <div class="alert-popup">
             <p>
-              憑本人有效威力卡可再享包廂費、續唱費、歡唱費及單點餐飲九折之優惠。(酒類、服務費恕不打折)
-              當日消費若未出示威力卡及相關優惠券折抵，一經離店便無法再享其相關優惠內容。
-              連續假日比照週六計費；例假日前夕比照週五計費；例假日(含連假最後一日)比照週日計費。(特殊節日/春節將另行公告)
+              憑本人有效會員可再享包廂費、續唱費、歡唱費及單點餐飲九折之優惠。(酒類、服務費恕不打折)
+              當日消費若未出示會員及相關優惠券折抵，一經離店便無法再享其相關優惠內容。
               預訂 VIP 以上包廂型式需預付訂金，詳細活動辦法請洽詢門市人員。
-              兒童計費標準：5歲(含)以下兒童免費，6歲~12歲半價，13歲(含)以上以成人計費。
               訪客計費方式：時間為10分鐘，若超過10分鐘，將依現場收費標準計價。
               自帶酒每間酌收開瓶費：小包廂400元、中包廂600元、大包廂800元、特大包1000元。
               包廂內若有蛋糕、飲料、佈置物等造成污損之情形，將視污損情況酌收包廂清潔費1000元起；器材損毀，照價賠償。
@@ -48,7 +38,18 @@
             </p>
             <button @click.stop="hideAlert">關閉</button>
           </div>
+          
         </div>
+      </div>
+      <div class="map-frame">
+        <iframe
+          :src="mapSrc"
+          width="100%"
+          height="400"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+        ></iframe>
       </div>
     </div>
   </template>
@@ -58,13 +59,14 @@
     name: 'Map',
     data() {
       return {
-        storeName: '資展KTV大安旗艦店',
+        storeName: 'GOLD PANDA大安旗艦店',
         phone: '(02) 6631-6588',
         address: '106台北市大安區復興南路一段390號2樓',
         hours: '24小時營業',
-        transportInfo: '靠近地鐵站，方便搭乘公共交通。',
-        mapSrc: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.0046035395794!2d121.54083797607859!3d25.033917838293455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abd379a5ec97%3A0xedc006d25a9e35df!2z6LOH5bGV5ZyL6Zqb6IKh5Lu95pyJ6ZmQ5YWs5Y-4!5e0!3m2!1szh-TW!2stw!4v1721628094134!5m2!1szh-TW!2stw',
-        imageSrc: 'https://example.com/your-image.jpg', // 替換圖片 URL
+        room: '小型包廂(5人)、中型包廂(10人)、大型包廂(20人)',
+        transportInfo: '靠近大安捷運站，方便搭乘公共交通。',
+        mapSrc: 'https://www.google.com/maps/d/embed?mid=1xwDlUfH08eh1ya9atxxvSQZKepcEiSg&hl=zh-TW&ehbc=2E312F" width="640" height="480',
+        imageSrc: '', // 替換圖片 URL
         isAlertVisible: false, // 控制彈窗顯示
       };
     },
@@ -84,11 +86,17 @@
     display: flex;
     padding: 20px;
     align-items: flex-start;
+    overflow: hidden; /* 隱藏超出範圍的部分 */
   }
   
   .map-frame {
     flex: 1;
-    margin-right: 20px;
+    width: 100%;
+  height: 100%;
+    margin-top: 15px;
+    margin-right: 200px;
+    clip-path: inset(0% 0 0 0); /* 裁切上方30% */
+  /* 裁切形狀的百分比可以根據需求進行調整 */
   }
   
   .content-container {
@@ -108,26 +116,32 @@
   
   .store-info {
     text-align: left;
+    margin-left: 200px;
   }
   
   .store-info h2 {
     margin-bottom: 10px;
     font-size: 24px;
-    color: #333;
+    
+    font-weight: 800;
   }
   
   .store-info p {
     margin: 5px 0;
     font-size: 16px;
-    color: #555;
+    
+    font-weight: 800;
   }
   
   button {
-    padding: 10px 20px;
     margin-top: 10px;
+    margin-left: 200px;
     font-size: 16px;
     cursor: pointer;
+    width: 100px; /* 調整按鈕的寬度 */
+    height: 38px; /* 調整按鈕的高度 */
   }
+
   
   .overlay {
     position: fixed;
@@ -143,18 +157,22 @@
   }
   
   .alert-popup {
-    background: white;
-    padding: 20px;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .alert-popup p {
-    margin: 0 0 10px;
-  }
-  
-  .alert-popup button {
-    padding: 5px 10px;
-  }
+  background: white;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px; /* 設定彈窗最大寬度 */
+  width: 100%; /* 使彈窗寬度占滿 max-width 設定的寬度 */
+}
+
+.alert-popup p {
+  margin: 0 0 10px;
+  font-size: 14px; /* 調整文字大小 */
+}
+
+.alert-popup button {
+  padding: 5px 10px;
+  font-size: 14px; /* 調整按鈕文字大小 */
+}
   </style>
   

@@ -11,6 +11,7 @@ import Map from '../views/Map.vue';
 import NewsWebsite from '../views/NewsWebsite.vue';
 import NewsShow from '../views/NewsShow.vue';
 import Booking from '../views/Booking.vue';
+import Room from '../views/Room.vue';
 
 // 定義路由
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
     { path: '/newswebsite', name: 'NewsWebsite', component: NewsWebsite },
     { path: '/newsshow/:newsId', name: 'NewsShow', component: NewsShow, props: true },
     { path: '/booking', name: 'Booking', component: Booking, props: true },
+    { path: '/room', component: Room },//門市地點
 ];
 
 // 創建 router 實例

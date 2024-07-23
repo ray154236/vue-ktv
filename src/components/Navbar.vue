@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="/src/assets/logo1.png" alt="Logo" class="logo">
+        <img src="/src/assets/logo-removebg-preview.png" alt="Logo" class="logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,41 +16,29 @@
             <a class="nav-link" href="/map">門市地點</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">包廂介紹</a>
+            <a class="nav-link" href="/room">包廂介紹</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/member">會員專區</a>
           </li>
+
           
-          <li class="nav-item dropdown" v-if="!isLoggedIn">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-              會員專區
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="/login">登入</a></li>
-              <li><a class="dropdown-item" href="/register">註冊</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown" v-else>
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-              會員專區
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="/member-profile">會員資料</a></li>
-              <li><a class="dropdown-item" href="#" @click="handleLogout">登出</a></li>
-            </ul>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="#">線上訂位</a>
           </li>
-        </ul> 
+          
+            <!-- 登出按鈕的顯示 -->
+            <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking')">
+            <a class="nav-link" href="#" @click="handleLogout">登出</a>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Navbar',
@@ -60,26 +48,34 @@ export default {
   methods: {
     ...mapActions(['logout']),
     handleLogout() {
-      this.logout();
+      this.logout().then(() => {
+        this.$router.push('/'); // 登出後跳轉到首頁或其他頁面
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-
 /* 覆蓋 Bootstrap 樣式 */
 .navbar.navbar-light.bg-light {
   background-color: rgb(10, 0, 0) !important;
 }
+
 /* 添加自定義樣式 */
 .navbar {
   padding: 0.5rem 1rem;
   box-shadow: 0 2px 4px rgba(248, 246, 246, 0.1);
+  min-height: 100px; /* 增加導覽列的最小高度 */
+  max-height: 100px; /* 增加導覽列的最小高度 */
+  background-image: url('/src/assets/background2.jpg');
 }
 
 .navbar-brand .logo {
-  height: 60px; /* 調整 Logo 高度 */
+  margin-left: -60px;
+  margin-top: 20px;
+  height: 120px; /* 增大 Logo 高度 */
+  width: auto; /* 自動調整寬度以保持比例 */
 }
 
 .navbar-nav .nav-item .nav-link {
