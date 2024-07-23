@@ -30,10 +30,12 @@
       <button @click="cancelChanges">取消</button>
     </div>
 
-    <!-- 修改資料按鈕 -->
-    <div v-else>
+    <!-- 修改資料&回上頁 按鈕 -->
+    <div v-else class="button-group">
+      <button @click="goBack">回上一頁</button>
       <button @click="enableEdit">修改資料</button>
     </div>
+   
   </div>
 </template>
 
@@ -94,6 +96,9 @@ export default {
       const dateObj = new Date(value);
       // 使用 Date 對象的方法來獲取 YYYY-MM-DD 格式的日期
       return dateObj.toISOString().split('T')[0];
+    },
+    goBack() {
+      this.$router.go(-1); // 返回上一頁
     }
   }
 };
@@ -108,10 +113,12 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   text-align: center;
+  font-weight: 800;
 }
 
 p {
   margin: 10px 0;
+  font-weight: 800;
 }
 
 button {
@@ -119,6 +126,7 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  font-weight: 800;
 }
 
 input {
@@ -126,5 +134,6 @@ input {
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
+  font-weight: 800;
 }
 </style>

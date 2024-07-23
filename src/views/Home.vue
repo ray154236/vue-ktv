@@ -1,6 +1,4 @@
 <template>
-
-
   <!-- 大圖輪播區域 -->
   <div class="carousel-inner">
     <!-- 使用 v-for 循環顯示大圖輪播項目，並根據 activeIndex 決定是否顯示為 active 狀態 -->
@@ -9,16 +7,6 @@
     </div>
   </div>
   
-  <!-- 大圖左右控制按鈕 -->
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" @click="prevSlide()">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" @click="nextSlide()">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-
   <!-- 小圖輪播區域 -->
   <div class="carousel-smallImage mt-3">
     <!-- 使用 v-for 循環顯示小圖輪播項目，並根據 activeIndex 決定是否顯示為激活狀態 -->

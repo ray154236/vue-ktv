@@ -47,6 +47,7 @@ export default createStore({
         setIdNumber({ commit }, idNumber) {
             commit('setIdNumber', idNumber); // 設置 ID Number
         },
+
         async logout({ commit }) {
             try {
                 const response = await axios.post('/logout');
