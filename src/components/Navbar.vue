@@ -16,7 +16,7 @@
             <a class="nav-link" href="/map">門市地點</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">包廂介紹</a>
+            <a class="nav-link" href="/room">包廂介紹</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/member">會員專區</a>
