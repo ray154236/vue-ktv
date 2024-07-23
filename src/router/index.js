@@ -10,8 +10,11 @@ import MemberProfile from '../views/MemberProfile.vue';
 import Map from '../views/Map.vue';
 import NewsWebsite from '../views/NewsWebsite.vue';
 import NewsShow from '../views/NewsShow.vue';
+<<<<<<< HEAD
 import Booking from '../views/Booking.vue';
 import Room from '../views/Room.vue';
+=======
+>>>>>>> 5959f909a7ee9ad6a8383426640c357f8a052b0f
 
 // 定義路由
 const routes = [
@@ -25,8 +28,11 @@ const routes = [
     { path: '/map', component: Map },//門市地點
     { path: '/newswebsite', name: 'NewsWebsite', component: NewsWebsite },
     { path: '/newsshow/:newsId', name: 'NewsShow', component: NewsShow, props: true },
+<<<<<<< HEAD
     { path: '/booking', name: 'Booking', component: Booking, props: true },
     { path: '/room', component: Room },//門市地點
+=======
+>>>>>>> 5959f909a7ee9ad6a8383426640c357f8a052b0f
 ];
 
 // 創建 router 實例
