@@ -95,7 +95,7 @@
   height: 100%;
     margin-top: 15px;
     margin-right: 200px;
-    clip-path: inset(0% 0 0 0); /* 裁切上方30% */
+    clip-path: inset(17% 0 0 0); /* 裁切上方17% */
   /* 裁切形狀的百分比可以根據需求進行調整 */
   }
   

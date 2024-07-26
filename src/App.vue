@@ -10,13 +10,17 @@
           <p>大安旗艦店</p>
           <p>訂位專線：(02)6631-6588</p>
           <p>服務時間：週一~週日</p>
-          <p>門市地址：台北市大安區復興南路一段390號2樓(捷運淡水信義線『大安站』)</p>
+          <p>門市地址：台北市大安區復興南路一段390號2樓</p>
         </div>
         <div class="footer-right">
           <ul>
+            <li><a href="/">官網首頁</a></li>
             <li><a href="/newswebsite">最新消息</a></li>
-            <li><a href="/map">門市地點</a></li>
-            <li><a href="/room">包廂介紹</a></li>
+            <li><a href="/map">門市地點</a></li>   
+          </ul></div>
+          <div class="footer-right">
+          <ul>
+          <li><a href="/room">包廂介紹</a></li>
             <li><a href="/members">會員專區</a></li>
             <li><a href="/booking">線上訂位</a></li>
           </ul>
@@ -43,7 +47,7 @@ export default {
 <style>
 /* 設置全局背景圖片 */
 body {
-  background: url('/src/assets/background2.jpg') no-repeat center center fixed;
+  background: url('/src/assets/background16.jpg') no-repeat center center fixed;
   background-size: cover;
   margin: 0;
   font-family: Arial, sans-serif;
@@ -70,13 +74,14 @@ footer {
   color: #ffffff;
   width: 100%;
   font-weight: 800;
+  font-size: 14px;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
-  max-width: 1200px; /* Adjust width to fit your design */
+  padding: 4px;
+  max-width: 1250px; /* Adjust width to fit your design */
   margin: 0 auto; /* Center align the footer-content */
 }
 
@@ -85,13 +90,14 @@ footer {
 }
 
 .footer-left p {
-  margin: 5px 0;
+  margin: 1px 0;
 }
 
 .footer-right ul {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 5px;
+  padding-left: 150px;
 }
 
 .footer-right li {

@@ -191,6 +191,7 @@ onMounted(async () => {
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: 800;
+  color: #ffffff
 }
 
 .info-list p {
@@ -211,7 +212,7 @@ onMounted(async () => {
 .member-actions button {
   margin-bottom: 15px;
   padding: 12px 24px;
-  font-size: 16px;
+  font-size: 22px;
   cursor: pointer;
   border: none;
   border-radius: 5px;

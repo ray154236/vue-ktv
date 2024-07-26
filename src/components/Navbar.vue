@@ -69,15 +69,10 @@ export default {
 
 .navbar-brand .logo {
   margin-left: -60px;
-  margin-top: 20px;
-<<<<<<< HEAD
-  height: 160px;
+  margin-top: 5px;
+  height: 80px;
   width: auto; /* 使 Logo 寬度適應導航列 */
   max-height: 100%; /* 確保 Logo 不超過導航列的高度 */
-=======
-  height: 70px; /* 增大 Logo 高度 */
-  width: auto; /* 自動調整寬度以保持比例 */
->>>>>>> 4040af52eae5bab8e188e209241403e89ad8cb78
 }
 
 .navbar-nav .nav-item .nav-link {
