@@ -14,11 +14,7 @@
     "moment": "^2.30.1",
     "monent": "^0.0.2-security",
     "sweetalert2": "^11.12.3",
-<<<<<<< HEAD
-    "vue": "^3.4.29",
-=======
     "vue": "^3.4.33",
->>>>>>> 4040af52eae5bab8e188e209241403e89ad8cb78
     "vue-router": "^4.4.0",
     "vuejs": "^3.0.1",
     "vuex": "^4.1.0",
