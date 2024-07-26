@@ -13,7 +13,7 @@
             class="form-input"
           />
         </div>
-        <div class="form-group file-upload">
+        <div class="form-group file-upload ">
           <input
             type="file"
             id="photoFile"

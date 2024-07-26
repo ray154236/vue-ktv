@@ -1,12 +1,12 @@
 <template>
     <div class="room-detail-container">
-      <h1 class="room-title">包廂照片</h1>
+      <!-- <h1 class="room-title">包廂照片</h1> -->
       <div class="carousel" 
            @mouseenter="stopAutoSlide" 
            @mouseleave="startAutoSlide">
         <div class="carousel-images" :style="carouselStyles">
           <div v-for="photo in photos" :key="photo.id" class="carousel-slide">
-            <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" />
+            <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" @click="callout" />
           </div>
         </div>
         <button @click="prevSlide" class="carousel-button prev">&#10094;</button>
@@ -74,9 +74,13 @@
   // Set up automatic slide change every 3 seconds
   let intervalId = null;
   
+  function callout(){
+    console.log("看要不要製作跳轉介面");
+  }
+
   function startAutoSlide() {
     if (!intervalId) {
-      intervalId = setInterval(nextSlide, 3000);
+      intervalId = setInterval(nextSlide, 2000);
     }
   }
   
@@ -117,7 +121,7 @@
   
   <style scoped>
 .room-detail-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   background-color: #f5f5f5;
