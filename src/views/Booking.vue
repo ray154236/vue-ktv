@@ -4,21 +4,21 @@
       <div class="form-group">
         <h1>線上訂位</h1>
       </div>
-        <div class="form-group">
-          <label>會員名稱:</label>
-              <p> {{ member.memberName }}</p>
-          </div>
-          <div class="form-group">
+      <div class="form-group">
+        <label>會員名稱:</label>
+        <p>{{ member.memberName }}</p>
+      </div>
+      <div class="form-group">
         <label>電話:</label>
-        <p> {{ member.phone }}</p>
-          </div>
+        <p>{{ member.phone }}</p>
+      </div>
       <div class="form-group">
         <label>信箱:</label>
-        <p> {{ member.email }}</p>
-          </div>
+        <p>{{ member.email }}</p>
+      </div>
       <div class="form-group">
-      <label>人數:</label>
-      <select v-model="order.numberOfPersons" required>
+        <label>人數:</label>
+        <select v-model="order.numberOfPersons" required>
           <option value="5">小包廂(適合5人)</option>
           <option value="10">中包廂(適合10人)</option>
           <option value="20">大包廂(適合20人)</option>
@@ -26,64 +26,61 @@
       </div>
       <div class="form-group">
         <label>訂位日期:</label>
-        <input type="date" v-model="order.orderDate" required>
+        <input type="date" v-model="order.orderDate" required @change="calculateEndTime" :min="minDate">
       </div>
 
       <div class="form-group">
         <label>訂位時間範圍:</label>
         <div class="row">
-          <div class="col">
+          <div class="col-md-4">
             <label>開始時間:</label>
-            <select class="form-control" v-model="order.startTime" @change="calculateEndTime">
-              <option v-for="hour in hours" :key="'start-' + hour" :value="hour">{{ hour }}</option>
-            </select>
-            <select class="form-control" v-model="order.startTimeMinute" @change="calculateEndTime">
-              <option v-for="minute in minutes" :key="'start-' + minute" :value="minute">{{ minute }}</option>
-            </select>
+            <div class="d-flex align-items-center">
+              <select class="form-control mr-1" v-model="order.startTime" @change="validateTime">
+                <option v-for="hour in hours" :key="'start-' + hour" :value="hour">{{ hour }}</option>
+              </select>
+              <div>時</div>
+              <select class="form-control ml-1" v-model="order.startTimeMinute" @change="validateTime">
+                <option v-for="minute in minutes" :key="'start-' + minute" :value="minute">{{ minute }}</option>
+              </select>
+              <div>分</div>
+            </div>
           </div>
-          <div class="col">
+          <div class="col-md-4">
+            <label>結束時間:</label>
+            <p>{{ order.endTime }}</p>
+          </div>
+          <div class="col-md-4">
             <label>歡唱時間(小時):</label>
             <select class="form-control" v-model="order.hours" @change="calculateEndTime">
               <option v-for="hour in singTimehours" :key="'singTime-' + hour" :value="hour">{{ hour }}</option>
             </select>
           </div>
-          <span></span>
-          <div class="col">
-  <label>結束時間:</label>
-  <p>{{ order.endTime }}</p>
-</div>
         </div>
       </div>
 
       <button type="submit">訂位</button>
       <!-- 返回按鈕 -->
       <button type="button" @click="goHome" class="return-button button-large">返回首頁</button>
-
     </form>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2'; // 引入 SweetAlert2
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default {
   computed: {
     member() {
-      return this.$store.state.member; // 获取会员数据
-
+      console.log('目前會員狀態:', this.$store.state.member); // 打印會員狀態
+      return this.$store.state.member;
     },
     isLoggedIn() {
-      return this.$store.getters.isLoggedIn; // 获取登入状态
+      return this.$store.getters.isLoggedIn;
     },
-    
-    filteredTimeOptions() {
-    return this.timeOptions.filter(time => time > this.order.startTime);
-    
-  },
-  hours() {
-      // 生成小时选项，假设从0到23
+    hours() {
       const hours = [];
       for (let i = 0; i < 24; i++) {
         hours.push(i.toString().padStart(2, '0'));
@@ -91,7 +88,6 @@ export default {
       return hours;
     },
     minutes() {
-      // 生成分钟选项，假设从0到59，步长为15分钟
       const minutes = [];
       for (let i = 0; i < 60; i += 15) {
         minutes.push(i.toString().padStart(2, '0'));
@@ -99,9 +95,8 @@ export default {
       return minutes;
     },
     singTimehours() {
-      // 生成小时选项，假设从0到23
       const hours = [];
-      for (let i = 1; i < 25; i++) {
+      for (let i = 1; i < 13; i++) {
         hours.push(i.toString().padStart(2, '0'));
       }
       return hours;
@@ -110,8 +105,13 @@ export default {
   created() {
   if (this.isLoggedIn) {
     this.$store.dispatch('fetchMemberProfile').then(() => {
-      // 確保成功獲取會員資料後，設置 memberId
-      this.order.memberId = this.member.memberId;
+      // 確保 member 資料已經正確獲取
+      console.log('Current member state:', this.member);
+      if (this.member && this.member.memberId) {
+        this.order.memberId = this.member.memberId;
+      } else {
+        console.error('MemberId is not available');
+      }
     }).catch(error => {
       console.error('Failed to fetch member profile:', error);
     });
@@ -119,11 +119,9 @@ export default {
     this.$router.push('/login');
   }
 },
-
-data() {
-  return {
-
-    order: {
+  data() {
+    return {
+      order: {
         orderId: '',
         startHour: '',
         startMinute: '',
@@ -132,119 +130,129 @@ data() {
         endTime: '',
         orderDate: '',
         numberOfPersons: '',
-        memberId:'',
-        hours: '', 
+        memberId: '',
+        hours: '',
       },
-    timeSlot: {
-      date:'',
-      startTime:'',
-      endTime:'',
-    },
-
-  };
-},
-
-  mounted() {
-
-},
-  methods: {
-    calculateEndTime() {
-      const startHour = parseInt(this.order.startTime, 10); // 提取開始時間的小時部分
-  const startMinute = parseInt(this.order.startTimeMinute, 10); // 提取開始時間的分鐘部分
-  const singTime = parseInt(this.order.hours, 10); // 提取歡唱時間
-
-  console.log('Start Hour:', startHour);
-  console.log('Start Minute:', startMinute);
-  console.log('Sing Time:', singTime);
-
-  if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime)) {
-
-    let signHours = singTime; // 計算總共的小時數
-    let totalHours =startHour + singTime
-    console.log('Total Hours:', signHours);
-    let endHour = totalHours % 24; // 如果超過 24 小時，取模運算，確保在一天內
-    let endMinute = startMinute; // 結束時間的分鐘部分與開始時間相同
-
-    // 更新結束時間
-    this.order.endTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-    console.log('End Time:', this.order.endTime);
-  }
-},
-     fetchMemberDetails() {
-  if (!member.value || !member.value.idNumber) {
-    console.error('Member idNumber is not available.');
-    return;
-  }
-  // 此处需要修改URL来符合你的API设置
-  axios.get(`http://localhost:8080/ktv-app/api/members/${member.value.idNumber}`)
-    .then(response => {
-      // 将会员详细信息设置给 data 中的 member 属性
-      member.value = response.data;
-    })
-    .catch(error => {
-      console.error('Error fetching member details:', error);
-    });
-},
-
-  validateTimeRange() {
-    // 在這裡添加適當的時間範圍驗證邏輯
+      minDate: new Date().toISOString().split('T')[0] // 獲取當前日期並格式化為 'YYYY-MM-DD'
+    };
   },
-    submitForm() {
-      console.log('提交表單人數:', this.order.numberOfPersons);
-      if (!this.order.numberOfPersons) {
-    alert('請選擇人數');
+  methods: {
+  calculateEndTime() {
+    const startHour = parseInt(this.order.startTime, 10);
+    const startMinute = parseInt(this.order.startTimeMinute, 10);
+    const singTime = parseInt(this.order.hours, 10);
+
+    if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime) && this.order.orderDate) {
+      let totalHours = startHour + singTime;
+      let endHour = totalHours % 24;
+      let nextDay = Math.floor(totalHours / 24);
+      let endDay = new Date(this.order.orderDate);
+      endDay.setDate(endDay.getDate() + nextDay);
+
+      let endMinute = startMinute;
+
+      this.order.endTime = `${endDay.getFullYear()}-${(endDay.getMonth() + 1).toString().padStart(2, '0')}-${endDay.getDate().toString().padStart(2, '0')} ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+    }
+  },
+
+  validateTime() {
+    const now = new Date();
+    const orderDate = new Date(this.order.orderDate);
+    const startHour = parseInt(this.order.startTime, 10);
+    const startMinute = parseInt(this.order.startTimeMinute, 10);
+
+    now.setSeconds(0, 0);
+
+    if (orderDate.toDateString() === now.toDateString()) {
+      const selectedTime = new Date(orderDate);
+      selectedTime.setHours(startHour);
+      selectedTime.setMinutes(startMinute);
+
+      if (selectedTime < now) {
+        Swal.fire({
+          icon: 'error',
+          title: '選擇錯誤',
+          text: '選擇的開始時間不能早於當前時間。',
+        });
+        return false;
+      }
+    } else if (orderDate < now) {
+      Swal.fire({
+        icon: 'error',
+        title: '選擇錯誤',
+        text: '訂位日期不能早於今天。',
+      });
+      return false;
+    }
+
+    return true;
+  },
+
+  submitForm() {
+  if (!this.validateTime()) {
     return;
   }
-        // 先新增新聞
-        this.addOrder()
-          .then(() => {
+  
+  // 确保填入用户的 member ID
+  this.order.memberId = this.member.memberId;
+  this.order.createBy = this.member.memberId; // 填入 createBy 字段
+  console.log('memberId:', this.order.memberId);
 
-          })
-          .catch(error => {
-            console.error('Error message:', error.message);
-            alert('訂位失敗！');
-          });
-      },
-      addOrder() {
-  // 第一步：建立訂單編號
-  return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/createOrderId')
-    .then(response => {
-      console.log('新聞訂單編號成功:', response.data);
-      this.order.orderId = response.data.orderId; // 將獲取的訂單ID保存到this.order中
-      // 第二步：根據訂單編號創建新訂單
-      return axios.post(`http://localhost:8080/ktv-app/ktvbackend/orders/newOrder/${response.data.orderId}`, this.order);
-    })
-    .then(response => {
-      console.log('成功創建新訂單:', response.data);
-      // 可以在這裡處理成功創建訂單後的邏輯
+  // 记录创建时间
+  this.order.createTime = new Date().toString();
+  this.order.startTime = `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`;
 
-      // 返回響應數據，以便調用addOrder的地方可以繼續處理
-      return response.data;
+  if (!this.order.numberOfPersons) {
+    Swal.fire({
+      icon: 'warning',
+      title: '人數選擇錯誤',
+      text: '請選擇人數。',
+    });
+    return;
+  }
+
+  // 将订单数据转换为 JSON 字符串
+  const orderData = JSON.stringify(this.order);
+
+  this.addOrder(orderData)
+    .then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: '訂位成功',
+        text: '您的訂位已成功提交！',
+      });
     })
     .catch(error => {
       console.error('錯誤訊息:', error.message);
-      throw error; // 傳遞錯誤以便後續處理
+      Swal.fire({
+        icon: 'error',
+        title: '訂位失敗',
+        text: '訂位過程中發生錯誤，請稍後再試。',
+      });
     });
 },
-goHome() {
-    // 使用路由導航回首頁
-    this.$router.push({ path: '/' });
-  },
 
-      },
-    generateTimeOptions() {
-  const times = [];
-  for (let hours = 0; hours < 24; hours++) {
-    for (let minutes = 0; minutes < 60; minutes += 15) {
-      const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      times.push(formattedTime);
-    }
-  }
-  this.times = times;
-  this.selectedTime = times[0]; // 將第一個時間設置為默認選中時間
+  addOrder(orderData) {
+  return axios.post(`http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder`, orderData, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => {
+    console.log('成功創建新訂單:', response.data);
+    return response.data;
+  })
+  .catch(error => {
+    console.error('錯誤訊息:', error.message);
+    throw error;
+  });
 },
 
-  };
+  goHome() {
+    this.$router.push({ path: '/' });
+  }
+}
+}
 </script>
 
 <style>
@@ -255,11 +263,12 @@ goHome() {
 }
 
 .form {
-  width: 400px; /* 設置表單的寬度 */
+  width: 600px; /* 設置表單的寬度 */
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  margin-top: 5%;
 }
 
 .form-group {
@@ -272,9 +281,8 @@ label {
 }
 
 input,
-textarea,
 select {
-  width: calc(100% - 20px); /* 寬度減去padding值，防止寬度超出容器 */
+  width: calc(100% - 20px); /* 寬度減去 padding 值，防止寬度超出容器 */
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -300,5 +308,37 @@ button:hover {
   margin-top: 20px; /* 返回按鈕上方的間距 */
 }
 
-</style>
+.col-md-4 {
+  flex: 0 0 33.33%; /* 使每個列的寬度佔比為三分之一 */
+  max-width: 33.33%;
+  padding-right: 15px;
+  padding-left: 15px;
+}
 
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.ml-1 {
+  margin-left: 5px;
+}
+
+.mr-1 {
+  margin-right: 5px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+@media (max-width: 992px) {
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+</style>
