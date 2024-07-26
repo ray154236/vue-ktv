@@ -143,6 +143,7 @@ h2 {
   padding: 12px;
   text-align: center;
   font-weight: 800;
+  
 }
 
 .order-table th {
@@ -152,7 +153,6 @@ h2 {
 
 .order-table tbody tr:hover {
   background-color: #d49f9f;
-  
 }
 
 .member-info {

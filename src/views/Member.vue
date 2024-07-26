@@ -189,14 +189,14 @@ onMounted(async () => {
 
 .profile-info h2 {
   margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 36px;
   font-weight: 800;
   color: #ffffff
 }
 
 .info-list p {
   margin: 10px 0;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
   color: #ffffff;
 }

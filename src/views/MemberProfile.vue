@@ -120,12 +120,13 @@ export default {
 p {
   margin: 10px 0;
   font-weight: 800;
+  font-size: 20px;
 }
 
 button {
   margin-top: 10px;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 22px;
   cursor: pointer;
   font-weight: 800;
 }
