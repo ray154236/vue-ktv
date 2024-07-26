@@ -197,6 +197,7 @@ onMounted(async () => {
   margin: 10px 0;
   font-size: 16px;
   font-weight: 800;
+  color: #ffffff;
 }
 
 .member-actions {

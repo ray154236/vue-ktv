@@ -117,6 +117,7 @@
   .store-info {
     text-align: left;
     margin-left: 200px;
+    color: #ffffff;
   }
   
   .store-info h2 {
@@ -128,7 +129,7 @@
   
   .store-info p {
     margin: 5px 0;
-    font-size: 16px;
+    font-size: 24px;
     
     font-weight: 800;
   }
@@ -167,7 +168,7 @@
 
 .alert-popup p {
   margin: 0 0 10px;
-  font-size: 14px; /* 調整文字大小 */
+  font-size: 16px; /* 調整文字大小 */
 }
 
 .alert-popup button {

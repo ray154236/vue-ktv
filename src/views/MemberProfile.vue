@@ -1,6 +1,6 @@
 <template>
   <div class="member-profile">
-    <h1>會員基本資料</h1>
+    <h1 style="color: white;">會員基本資料</h1>
     <div v-if="member">
       <p><strong>會員編號:</strong> {{ member.memberId }}</p>
       <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
@@ -114,6 +114,7 @@ export default {
   border-radius: 4px;
   text-align: center;
   font-weight: 800;
+  color: #ffffff;
 }
 
 p {
@@ -135,5 +136,8 @@ input {
   width: 100%;
   box-sizing: border-box;
   font-weight: 800;
+}
+.title {
+  color: #ffffff;
 }
 </style>

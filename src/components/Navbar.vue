@@ -24,7 +24,7 @@
 
           
           <li class="nav-item">
-            <a class="nav-link" href="#">線上訂位</a>
+            <a class="nav-link" href="/booking">線上訂位</a>
           </li>
           
             <!-- 登出按鈕的顯示 -->
