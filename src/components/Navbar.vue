@@ -10,31 +10,28 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <a class="nav-link active" href="/newswebsite">最新消息</a>
+            <router-link class="nav-link" to="/newswebsite">最新消息</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/map">門市地點</a>
+            <router-link class="nav-link" to="/map">門市地點</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">包廂介紹</a>
+            <router-link class="nav-link" to="/room">包廂介紹</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/member">會員專區</a>
+            <router-link class="nav-link" to="/member">會員專區</router-link>
           </li>
-
-          
           <li class="nav-item">
-            <a class="nav-link" href="#">線上訂位</a>
+            <router-link class="nav-link" to="/booking">線上訂位</router-link>
           </li>
-          
-            <!-- 登出按鈕的顯示 -->
-            <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking')">
+          <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room')">
             <a class="nav-link" href="#" @click="handleLogout">登出</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
+  
 </template>
 
 <script>
@@ -57,25 +54,25 @@ export default {
 </script>
 
 <style scoped>
-/* 覆蓋 Bootstrap 樣式 */
 .navbar.navbar-light.bg-light {
   background-color: rgb(10, 0, 0) !important;
 }
 
-/* 添加自定義樣式 */
 .navbar {
+  font-size: 24px;
   padding: 0.5rem 1rem;
   box-shadow: 0 2px 4px rgba(248, 246, 246, 0.1);
-  min-height: 100px; /* 增加導覽列的最小高度 */
-  max-height: 100px; /* 增加導覽列的最小高度 */
+  min-height: 100px;
+  max-height: 100px;
   background-image: url('/src/assets/background2.jpg');
 }
 
 .navbar-brand .logo {
   margin-left: -60px;
   margin-top: 20px;
-  height: 120px; /* 增大 Logo 高度 */
-  width: auto; /* 自動調整寬度以保持比例 */
+  height: 160px;
+  width: auto; /* 使 Logo 寬度適應導航列 */
+  max-height: 100%; /* 確保 Logo 不超過導航列的高度 */
 }
 
 .navbar-nav .nav-item .nav-link {
@@ -117,6 +114,6 @@ export default {
 }
 
 .navbar-toggler-icon {
-  background-image: url('data:image/svg+xml;base64,...'); /* 可以使用自定義圖標 */
+  background-image: url('data:image/svg+xml;base64,...');
 }
 </style>

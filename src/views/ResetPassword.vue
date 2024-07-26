@@ -42,7 +42,7 @@ export default {
         });
         this.message = '密碼變更成功!';
         alert(this.message);
-        this.$router.push('/');  // 跳轉到會員基本資料頁面
+        this.$router.push('/login');  // 跳轉到會員基本資料頁面
       } catch (error) {
         if (error.response) {
           this.message = error.response.data.message || '發生錯誤';

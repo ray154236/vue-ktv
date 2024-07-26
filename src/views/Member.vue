@@ -64,7 +64,7 @@ function goToReservation() {
 }
 
 function goToReservationQuery() {
-  router.push('/');
+  router.push('/orderlist');
 }
 
 function triggerFileInput() {

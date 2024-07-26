@@ -121,14 +121,15 @@
   
   .store-info h2 {
     margin-bottom: 10px;
-    font-size: 24px;
-    
+    margin-left: -10px;
+    font-size: 48px;
     font-weight: 800;
+    margin-bottom: 50px;
   }
   
   .store-info p {
-    margin: 5px 0;
-    font-size: 16px;
+    margin: 15px 0;
+    font-size: 24px;
     
     font-weight: 800;
   }

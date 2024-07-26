@@ -52,6 +52,26 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      // 檢查身分證字號長度是否為10
+      if (this.idNumber.length !== 10) {
+        this.message = '身分證字號必須為 10 個字元。';
+        return;
+      }
+      
+      // 檢查身分證字號的第一個字元是否為大寫英文
+      const firstChar = this.idNumber.charAt(0);
+      if (!/^[A-Z]$/.test(firstChar)) {
+        this.message = '身分證字號的第一個字元必須是大寫英文。';
+        return;
+      }
+      
+      // 檢查身分證字號的其餘字元是否為數字
+      const restChars = this.idNumber.slice(1);
+      if (!/^\d{9}$/.test(restChars)) {
+        this.message = '身分證字號的第二到第十個字元必須是數字。';
+        return;
+      }
+      
       try {
         const response = await fetch('/ktv-app/api/register', {
           method: 'POST',
@@ -75,7 +95,7 @@ export default {
           this.$router.push('/login');  // 成功後跳轉到登入頁面
         } else {
           const errorData = await response.text();
-          this.message = `Registration failed: ${errorData}`;
+          this.message = `${errorData}`;
         }
       } catch (error) {
         console.error('Error:', error);
