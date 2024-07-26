@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="/src/assets/logo-removebg-preview.png" alt="Logo" class="logo">
+        <img src="/src/assets/GOLD-PANDA.png" alt="Logo" class="logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,13 +16,13 @@
             <router-link class="nav-link" to="/map">門市地點</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/room">包廂介紹</router-link>
+            <a class="nav-link" href="/room">包廂介紹</a>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/member">會員專區</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/booking">線上訂位</router-link>
+            <a class="nav-link" href="/booking">線上訂位</a>
           </li>
           <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room')">
             <a class="nav-link" href="#" @click="handleLogout">登出</a>
@@ -70,9 +70,14 @@ export default {
 .navbar-brand .logo {
   margin-left: -60px;
   margin-top: 20px;
+<<<<<<< HEAD
   height: 160px;
   width: auto; /* 使 Logo 寬度適應導航列 */
   max-height: 100%; /* 確保 Logo 不超過導航列的高度 */
+=======
+  height: 70px; /* 增大 Logo 高度 */
+  width: auto; /* 自動調整寬度以保持比例 */
+>>>>>>> 4040af52eae5bab8e188e209241403e89ad8cb78
 }
 
 .navbar-nav .nav-item .nav-link {

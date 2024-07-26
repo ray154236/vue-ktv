@@ -43,7 +43,11 @@ export default {
 <style>
 /* 設置全局背景圖片 */
 body {
+<<<<<<< HEAD
   background: url('/src/assets/background2.jpg') no-repeat center center fixed;
+=======
+  background: url('/src/assets/background16.jpg') no-repeat center center fixed;
+>>>>>>> 4040af52eae5bab8e188e209241403e89ad8cb78
   background-size: cover;
   margin: 0;
   font-family: Arial, sans-serif;

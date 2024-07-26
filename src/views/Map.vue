@@ -95,7 +95,7 @@
   height: 100%;
     margin-top: 15px;
     margin-right: 200px;
-    clip-path: inset(17% 0 0 0); /* 裁切上方30% */
+    clip-path: inset(0% 0 0 0); /* 裁切上方30% */
   /* 裁切形狀的百分比可以根據需求進行調整 */
   }
   
@@ -117,6 +117,7 @@
   .store-info {
     text-align: left;
     margin-left: 200px;
+    color: #ffffff;
   }
   
   .store-info h2 {
@@ -128,7 +129,7 @@
   }
   
   .store-info p {
-    margin: 15px 0;
+    margin: 5px 0;
     font-size: 24px;
     
     font-weight: 800;
@@ -168,7 +169,7 @@
 
 .alert-popup p {
   margin: 0 0 10px;
-  font-size: 14px; /* 調整文字大小 */
+  font-size: 16px; /* 調整文字大小 */
 }
 
 .alert-popup button {
