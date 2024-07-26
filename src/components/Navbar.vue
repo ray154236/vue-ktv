@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="/src/assets/logo-removebg-preview.png" alt="Logo" class="logo">
+        <img src="/src/assets/GOLD-PANDA.png" alt="Logo" class="logo">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -74,7 +74,7 @@ export default {
 .navbar-brand .logo {
   margin-left: -60px;
   margin-top: 20px;
-  height: 120px; /* 增大 Logo 高度 */
+  height: 70px; /* 增大 Logo 高度 */
   width: auto; /* 自動調整寬度以保持比例 */
 }
 
