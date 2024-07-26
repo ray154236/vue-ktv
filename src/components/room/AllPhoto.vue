@@ -207,7 +207,7 @@
   font-size: 28px;
   font-weight: bold;
   background: none; /* 去掉背景 */
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* 加深陰影 */
+  text-shadow: 3px 3px 6px orange; /* 加深陰影 */
 }
 
 .room-type-container {
@@ -218,7 +218,7 @@
 
 .room-type-container p {
   font-size: 20px; /* 增大字體大小 */
-  color: #555;
+  color:white;
   font-weight: bold; /* 加粗字體 */
 }
 
