@@ -10,11 +10,13 @@ import MemberProfile from '../views/MemberProfile.vue';
 import Map from '../views/Map.vue';
 import NewsWebsite from '../views/NewsWebsite.vue';
 import NewsShow from '../views/NewsShow.vue';
+import Orderlist from '../views/Orderlist.vue';
+import Booking from '../views/Booking.vue';
 import Room from '../views/Room.vue';
 
 // 定義路由
 const routes = [
-    { path: '/', component: Home },  // 將首頁設為 Home
+    { path: '/', component: Home },//首頁輪播
     { path: '/member', component: Member, meta: { requiresAuth: true } },//會員專區
     { path: '/login', component: Login },//登入
     { path: '/register', component: Register },//註冊
@@ -22,8 +24,10 @@ const routes = [
     { path: '/reset-password', component: ResetPassword },//重設密碼
     { path: '/member-profile', component: MemberProfile, meta: { requiresAuth: true } },//會員基本資料
     { path: '/map', component: Map },//門市地點
-    { path: '/newswebsite', name: 'NewsWebsite', component: NewsWebsite },
-    { path: '/newsshow/:newsId', name: 'NewsShow', component: NewsShow, props: true },
+    { path: '/newswebsite', name: 'NewsWebsite', component: NewsWebsite },//最新消息
+    { path: '/newsshow/:newsId', name: 'NewsShow', component: NewsShow, props: true },//最新消息點擊
+    { path: '/orderlist', component: Orderlist },//會員個人訂單
+    { path: '/booking', name: 'Booking', component: Booking, props: true },
     { path: '/room', component: Room },//門市地點
 ];
 

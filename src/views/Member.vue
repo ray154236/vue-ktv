@@ -64,7 +64,7 @@ function goToReservation() {
 }
 
 function goToReservationQuery() {
-  router.push('/');
+  router.push('/orderlist');
 }
 
 function triggerFileInput() {
@@ -191,12 +191,14 @@ onMounted(async () => {
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: 800;
+  color: #ffffff
 }
 
 .info-list p {
   margin: 10px 0;
   font-size: 16px;
   font-weight: 800;
+  color: #ffffff;
 }
 
 .member-actions {
@@ -210,7 +212,7 @@ onMounted(async () => {
 .member-actions button {
   margin-bottom: 15px;
   padding: 12px 24px;
-  font-size: 16px;
+  font-size: 22px;
   cursor: pointer;
   border: none;
   border-radius: 5px;
