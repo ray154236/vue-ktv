@@ -7,7 +7,7 @@
         <input type="text" v-model="searchKeyword" placeholder="標題關鍵字" class="form-control me-2">
         <button @click="searchByTitle" class="btn btn-primary">搜尋</button>
       </div>
-      
+
       <!-- 排序方式 -->
       <div class="ms-auto">
         <label class="me-2">排列方式:</label>
@@ -17,17 +17,17 @@
         </select>
       </div>
     </div>
-    
+
     <div class="news-grid">
       <div v-for="news in filteredNews" :key="news.newsId" class="news-item" @click="newsShow(news.newsId)">
-        <img :src="`http://localhost:8080/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
         <div class="news-details">
           <p class="news-date">{{ formatDate(news.startDate) }} 至 {{ formatDate(news.endDate) }}</p>
           <h3 class="news-title">{{ news.title }}</h3>
         </div>
       </div>
     </div>
-    
+
     <!-- 返回按鈕 -->
     <button type="button" @click="goHome" class="return-button">返回首頁</button>
   </div>

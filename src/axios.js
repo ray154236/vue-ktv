@@ -2,13 +2,13 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: '/ktv-app/api',
+    baseURL: import.meta.env.VITE_APP_API_BASE_URL || '/ktv-app/api',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
     }
 });
-// 請求攔截器
+
 instance.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
     if (token) {

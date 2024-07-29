@@ -60,21 +60,21 @@
 
       <button type="submit">訂位</button>
       <!-- 返回按鈕 -->
-      <button type="button" @click="goHome" class="return-button button-large">返回首頁</button>
+      <button type="button" @click="goBack" class="return-button button-large">返回</button>
     </form>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Swal from 'sweetalert2'; // 引入 SweetAlert2
+import Swal from 'sweetalert2';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
 export default {
   computed: {
     member() {
-      console.log('目前會員狀態:', this.$store.state.member); // 打印會員狀態
+      console.log('目前會員狀態:', this.$store.state.member);
       return this.$store.state.member;
     },
     isLoggedIn() {
@@ -103,22 +103,20 @@ export default {
     },
   },
   created() {
-  if (this.isLoggedIn) {
-    this.$store.dispatch('fetchMemberProfile').then(() => {
-      // 確保 member 資料已經正確獲取
-      console.log('Current member state:', this.member);
-      if (this.member && this.member.memberId) {
-        this.order.memberId = this.member.memberId;
-      } else {
-        console.error('MemberId is not available');
-      }
-    }).catch(error => {
-      console.error('Failed to fetch member profile:', error);
-    });
-  } else {
-    this.$router.push('/login');
-  }
-},
+    if (this.isLoggedIn) {
+      this.$store.dispatch('fetchMemberProfile').then(() => {
+        if (this.member && this.member.memberId) {
+          this.order.memberId = this.member.memberId;
+        } else {
+          console.error('MemberId is not available');
+        }
+      }).catch(error => {
+        console.error('Failed to fetch member profile:', error);
+      });
+    } else {
+      this.$router.push('/login');
+    }
+  },
   data() {
     return {
       order: {
@@ -132,126 +130,119 @@ export default {
         numberOfPersons: '',
         memberId: '',
         hours: '',
+        createBy: '',
+        updateBy: '',
       },
-      minDate: new Date().toISOString().split('T')[0] // 獲取當前日期並格式化為 'YYYY-MM-DD'
+      minDate: new Date().toISOString().split('T')[0]
     };
   },
   methods: {
-  calculateEndTime() {
-    const startHour = parseInt(this.order.startTime, 10);
-    const startMinute = parseInt(this.order.startTimeMinute, 10);
-    const singTime = parseInt(this.order.hours, 10);
+    calculateEndTime() {
+      const startHour = parseInt(this.order.startTime, 10);
+      const startMinute = parseInt(this.order.startTimeMinute, 10);
+      const singTime = parseInt(this.order.hours, 10);
 
-    if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime) && this.order.orderDate) {
-      let totalHours = startHour + singTime;
-      let endHour = totalHours % 24;
-      let nextDay = Math.floor(totalHours / 24);
-      let endDay = new Date(this.order.orderDate);
-      endDay.setDate(endDay.getDate() + nextDay);
+      if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime) && this.order.orderDate) {
+        let totalHours = startHour + singTime;
+        let endHour = totalHours % 24;
+        let nextDay = Math.floor(totalHours / 24);
+        let endDay = new Date(this.order.orderDate);
+        endDay.setDate(endDay.getDate() + nextDay);
 
-      let endMinute = startMinute;
+        let endMinute = startMinute;
 
-      this.order.endTime = `${endDay.getFullYear()}-${(endDay.getMonth() + 1).toString().padStart(2, '0')}-${endDay.getDate().toString().padStart(2, '0')} ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-    }
-  },
+        this.order.endTime = `${endDay.getFullYear()}-${(endDay.getMonth() + 1).toString().padStart(2, '0')}-${endDay.getDate().toString().padStart(2, '0')} ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+      }
+    },
 
-  validateTime() {
-    const now = new Date();
-    const orderDate = new Date(this.order.orderDate);
-    const startHour = parseInt(this.order.startTime, 10);
-    const startMinute = parseInt(this.order.startTimeMinute, 10);
+    validateTime() {
+      const now = new Date();
+      const orderDate = new Date(this.order.orderDate);
+      const startHour = parseInt(this.order.startTime, 10);
+      const startMinute = parseInt(this.order.startTimeMinute, 10);
 
-    now.setSeconds(0, 0);
+      now.setSeconds(0, 0);
 
-    if (orderDate.toDateString() === now.toDateString()) {
-      const selectedTime = new Date(orderDate);
-      selectedTime.setHours(startHour);
-      selectedTime.setMinutes(startMinute);
+      if (orderDate.toDateString() === now.toDateString()) {
+        const selectedTime = new Date(orderDate);
+        selectedTime.setHours(startHour);
+        selectedTime.setMinutes(startMinute);
 
-      if (selectedTime < now) {
+        if (selectedTime < now) {
+          Swal.fire({
+            icon: 'error',
+            title: '選擇錯誤',
+            text: '選擇的開始時間不能早於當前時間。',
+          });
+          return false;
+        }
+      } else if (orderDate < now) {
         Swal.fire({
           icon: 'error',
           title: '選擇錯誤',
-          text: '選擇的開始時間不能早於當前時間。',
+          text: '訂位日期不能早於今天。',
         });
         return false;
       }
-    } else if (orderDate < now) {
-      Swal.fire({
-        icon: 'error',
-        title: '選擇錯誤',
-        text: '訂位日期不能早於今天。',
-      });
-      return false;
-    }
 
-    return true;
-  },
-
-  submitForm() {
-  if (!this.validateTime()) {
-    return;
-  }
-  
-  // 确保填入用户的 member ID
-  this.order.memberId = this.member.memberId;
-  this.order.createBy = this.member.memberId; // 填入 createBy 字段
-  console.log('memberId:', this.order.memberId);
-
-  // 记录创建时间
-  this.order.createTime = new Date().toString();
-  this.order.startTime = `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`;
-
-  if (!this.order.numberOfPersons) {
-    Swal.fire({
-      icon: 'warning',
-      title: '人數選擇錯誤',
-      text: '請選擇人數。',
-    });
-    return;
-  }
-
-  // 将订单数据转换为 JSON 字符串
-  const orderData = JSON.stringify(this.order);
-
-  this.addOrder(orderData)
-    .then(() => {
-      Swal.fire({
-        icon: 'success',
-        title: '訂位成功',
-        text: '您的訂位已成功提交！',
-      });
-    })
-    .catch(error => {
-      console.error('錯誤訊息:', error.message);
-      Swal.fire({
-        icon: 'error',
-        title: '訂位失敗',
-        text: '訂位過程中發生錯誤，請稍後再試。',
-      });
-    });
-},
-
-  addOrder(orderData) {
-  return axios.post(`http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder`, orderData, {
-    headers: {
-      'Content-Type': 'application/json',
+      return true;
     },
-  })
-  .then(response => {
-    console.log('成功創建新訂單:', response.data);
-    return response.data;
-  })
-  .catch(error => {
-    console.error('錯誤訊息:', error.message);
-    throw error;
-  });
-},
 
-  goHome() {
-    this.$router.push({ path: '/' });
+    submitForm() {
+      if (!this.isLoggedIn || !this.member) {
+        console.error('會員未登入或會員資料未加載');
+        return;
+      }
+
+      this.order.memberId = this.member.memberId;
+      this.order.createBy = this.member.memberId;
+      this.order.updateBy = this.member.memberId;
+      this.order.createTime = new Date().toISOString();
+      this.order.startTime = `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`;
+      
+      console.log('提交表單人數:', this.order.numberOfPersons);
+      console.log('提交的訂單:', this.order);
+
+      if (!this.order.numberOfPersons) {
+        alert('請選擇人數');
+        return;
+      }
+
+      this.addOrder()
+        .then(response => {
+          const responseData = response.data;
+          if (responseData.success) {
+            Swal.fire({
+              icon: 'success',
+              title: '訂位成功',
+              text: responseData.message,
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: '訂位失敗',
+              text: responseData.message,
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error message:', error.message);
+          Swal.fire({
+            icon: 'error',
+            title: '訂位失敗',
+            text: '訂位過程中發生錯誤。',
+          });
+        });
+    },
+
+    addOrder() {
+      return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', this.order);
+    },
+
+    goBack() {
+      this.$router.go(-1); // 返回到上一頁
+    }
   }
-}
 }
 </script>
 
@@ -263,12 +254,13 @@ export default {
 }
 
 .form {
-  width: 600px; /* 設置表單的寬度 */
+  width: 600px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
   margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 .form-group {
@@ -282,7 +274,7 @@ label {
 
 input,
 select {
-  width: calc(100% - 20px); /* 寬度減去 padding 值，防止寬度超出容器 */
+  width: calc(100% - 20px);
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -297,19 +289,19 @@ button {
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  margin-top: 10px; /* 調整按鈕間距 */
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #0056b3; /* 懸停時顏色變化 */
+  background-color: #0056b3;
 }
 
 .return-button {
-  margin-top: 20px; /* 返回按鈕上方的間距 */
+  margin-top: 20px;
 }
 
 .col-md-4 {
-  flex: 0 0 33.33%; /* 使每個列的寬度佔比為三分之一 */
+  flex: 0 0 33.33%;
   max-width: 33.33%;
   padding-right: 15px;
   padding-left: 15px;
