@@ -24,7 +24,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/booking">線上訂位</a>
           </li>
-          <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room')">
+          <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room' || $route.path === '/orderlist')">
             <a class="nav-link" href="#" @click="handleLogout">登出</a>
           </li>
         </ul>
