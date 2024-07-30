@@ -3,12 +3,8 @@
   <h2 class="title">我的訂單</h2>
 
   <!-- 會員資訊區域 -->
-  <div class="member-info p ">會員名稱:{{ member.memberName }} 電話:{{ member.phone }} 信箱:{{ member.email }} </div>
+  <div class="member-info p">會員名稱:{{ member.memberName }} 電話:{{ member.phone }} 信箱:{{ member.email }}</div>
   <div class="container">
-
-
-
-
     <!-- 訂單表格區域 -->
     <table class="order-table">
       <thead>
@@ -28,6 +24,7 @@
           </th>
           <th>結束時間</th>
           <th>歡唱時數</th>
+          <th>操作</th> <!-- 新增操作列 -->
         </tr>
       </thead>
       <tbody>
@@ -39,11 +36,15 @@
           <td>{{ order.startTime }}</td>
           <td>{{ order.endTime }}</td>
           <td>{{ order.hours }}</td>
+          <td>
+            <button @click="cancelOrder(order.orderId)">取消訂單</button> <!-- 取消訂單按鈕 -->
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';  // 引入 Vue 的響應式 API
@@ -125,14 +126,49 @@ function sort(key) {
   }
 }
 
+// 取消訂單的函數
+async function cancelOrder(orderId) {
+  try {
+    const response = await axios.post(`http://localhost:8080/ktvbackend/orders/noCheckIn/${orderId}`, {});
+    if (response.data.success) {
+      Swal.fire({
+        icon: "success",
+        title: "取消成功",
+        text: response.data.message,
+        showConfirmButton: true,
+      });
+      // 重新加載訂單列表
+      await orderList(current.value);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "取消失敗",
+        text: response.data.message,
+        showConfirmButton: true,
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "取消訂單失敗",
+      text: error.message,
+      showConfirmButton: true,
+    });
+  }
+}
+
 // 在組件掛載後調用 orderList 函數
 onMounted(async () => {
+  await store.dispatch('fetchMemberProfile');
+  const memberData = store.getters.member;
+
   if (!member.value) {
     await store.dispatch('fetchMemberProfile');  // 如果會員資訊不存在，則請求會員資訊
   }
   orderList();  // 獲取訂單列表
 });
 </script>
+
 
 <style scoped>
 .container {
