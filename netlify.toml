@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/ktv-app/api/*"
+  to = "http://localhost:8080/ktv-app/api/:splat"
+  status = 200
+  force = true
