@@ -10,9 +10,10 @@ import MemberProfile from '../views/MemberProfile.vue';
 import Map from '../views/Map.vue';
 import NewsWebsite from '../views/NewsWebsite.vue';
 import NewsShow from '../views/NewsShow.vue';
-import Orderlist from '../views/Orderlist.vue';
+import Orderlist from '../views/OrderList.vue';
 import Booking from '../views/Booking.vue';
 import Room from '../views/Room.vue';
+
 
 // 定義路由
 const routes = [
