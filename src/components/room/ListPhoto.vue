@@ -163,22 +163,31 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3); /* 半透明背景 */
   color: white;
   border: none;
-  padding: 10px;
+  width: 50px; /* 小圓球寬度 */
+  height: 50px; /* 小圓球高度 */
+  border-radius: 50%; /* 變成圓形 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-size: 24px;
-  border-radius: 50%;
+  font-size: 30px; /* 圓球內的箭頭字型大小 */
   z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-button:hover {
+  background-color: rgba(0, 0, 0, 0.6); /* 懸停時更深的透明背景 */
 }
 
 .carousel-button.prev {
-  left: 10px;
+  left: 10px; /* 左邊位置 */
 }
 
 .carousel-button.next {
-  right: 10px;
+  right: 10px; /* 右邊位置 */
 }
 
 .photo-description {

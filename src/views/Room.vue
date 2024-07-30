@@ -1,6 +1,7 @@
 <template>
-    <AllPhoto></AllPhoto>
     <!-- <ListPhoto></ListPhoto> -->
+    <AllPhoto></AllPhoto>
+    
 </template>
 
 <script setup>
