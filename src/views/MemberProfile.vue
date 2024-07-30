@@ -35,7 +35,7 @@
       <button @click="goBack">回上一頁</button>
       <button @click="enableEdit">修改資料</button>
     </div>
-   
+
   </div>
 </template>
 
@@ -73,18 +73,20 @@ export default {
       };
     },
     saveChanges() {
-  // 呼叫 Vuex 的 action 並確保返回一個 Promise
-  this.$store.dispatch('updateMemberInfo', this.editedMember)
-    .then(() => {
-      this.editable = false;
-      // 更新成功後，更新本地的會員資料
-      this.$store.commit('setMember', this.editedMember);
-    })
-    .catch(error => {
-      console.error('更新會員資料失敗', error);
-      // 可以根據具體情況顯示錯誤訊息給使用者
-    });
-},
+      // 呼叫 Vuex 的 action 並確保返回一個 Promise
+      this.$store.dispatch('updateMemberInfo', this.editedMember)
+        .then(() => {
+          this.editable = false;
+          // 更新成功後，更新本地的會員資料
+          this.$store.commit('setMember', this.editedMember);
+          this.message = '修改成功!';
+          alert(this.message);
+        })
+        .catch(error => {
+          console.error('更新會員資料失敗', error);
+          // 可以根據具體情況顯示錯誤訊息給使用者
+        });
+    },
 
     cancelChanges() {
       // 取消編輯，恢復為原始會員資料
@@ -138,6 +140,7 @@ input {
   box-sizing: border-box;
   font-weight: 800;
 }
+
 .title {
   color: #ffffff;
 }

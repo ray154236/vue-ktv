@@ -10,7 +10,7 @@ import MemberProfile from '../views/MemberProfile.vue';
 import Map from '../views/Map.vue';
 import NewsWebsite from '../views/NewsWebsite.vue';
 import NewsShow from '../views/NewsShow.vue';
-import Orderlist from '../views/OrderList.vue';
+import Orderlist from '../views/Orderlist.vue';
 import Booking from '../views/Booking.vue';
 import Room from '../views/Room.vue';
 
