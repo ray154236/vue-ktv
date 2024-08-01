@@ -1,4 +1,5 @@
 <template>
+   <h5 class="room-title">會員基本資料</h5>
   <div class="member-container">
     <!-- 會員頭像和基本資料 -->
     <div class="member-profile">
@@ -7,7 +8,6 @@
         <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" hidden>
       </div>
       <div class="profile-info">
-        <h2>會員基本資料</h2>
         <div v-if="member" class="info-list">
           <p><strong>會員編號:</strong> {{ member.memberId }}</p>
           <p><strong>帳號:</strong> {{ member.idNumber }}</p>
@@ -151,7 +151,7 @@ onMounted(async () => {
   align-items: flex-start;
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px;
+
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -167,12 +167,12 @@ onMounted(async () => {
 
 .profile-picture {
   margin-left: -450px;
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #007bff;
-  margin-bottom: 20px;
+  border: 2px solid orange;
+  margin-bottom: 2px;
   cursor: pointer;
   position: relative;
 }
@@ -188,7 +188,7 @@ onMounted(async () => {
 }
 
 .profile-info h2 {
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   font-size: 36px;
   font-weight: 800;
   color: #ffffff
@@ -202,7 +202,7 @@ onMounted(async () => {
 }
 
 .member-actions {
-  margin-top: 30px;
+ margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -216,13 +216,13 @@ onMounted(async () => {
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background-color: #6d8eb1;
+  background-color: #ff85b3;
   font-weight: 800;
   transition: background-color 0.3s, transform 0.2s;
 }
 
 .member-actions button:hover {
-  background-color: #2669ac;
+  background-color: #681736;
 }
 
 .member-actions button:active {
@@ -231,5 +231,15 @@ onMounted(async () => {
 
 .member-actions button:focus {
   outline: none;
+}
+.room-title {
+  margin-top: 40px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
 }
 </style>

@@ -187,5 +187,14 @@ p {
   color: red; /* 段落文字顏色 */
   margin-top: 20px; /* 段落頂部間距 */
 }
+.room-title {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
+}
 </style>
 

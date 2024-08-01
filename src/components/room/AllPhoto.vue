@@ -171,7 +171,7 @@ onMounted(fetchPhotos);
 }
 
 .info-button:hover {
-  background-color: #ff85b3;
+  background-color: #681736;
 }
 
 .info-button:focus {

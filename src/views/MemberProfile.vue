@@ -1,6 +1,6 @@
 <template>
   <div class="member-profile">
-    <h1 style="color: white;">會員基本資料</h1>
+    <h5 class="room-title">修改基本資料</h5>
     <div v-if="member">
       <p><strong>會員編號:</strong> {{ member.memberId }}</p>
       <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
@@ -26,8 +26,10 @@
       <input v-model="editedMember.birth" type="date">
       <label>Email:</label>
       <input v-model="editedMember.email" type="email" placeholder="請輸入Email">
+      <div class="button-group">
+        <button @click="cancelChanges">取消</button>
       <button @click="saveChanges">保存變更</button>
-      <button @click="cancelChanges">取消</button>
+      </div>
     </div>
 
     <!-- 修改資料&回上頁 按鈕 -->
@@ -109,28 +111,31 @@ export default {
 <style scoped>
 /* 會員資料頁面樣式 */
 .member-profile {
-  max-width: 600px;
+  max-width: 800px; /* 調整最大寬度以適應新布局 */
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
   border-radius: 4px;
-  text-align: center;
+  text-align: left; /* 讓文本靠左對齊 */
   font-weight: 800;
   color: #ffffff;
+  display: flex; /* 使用 Flexbox */
+  flex-direction: column; /* 垂直方向排列 */
+}
+
+.member-profile .content {
+  display: flex; /* 使用 Flexbox */
+  justify-content: space-between; /* 內容兩邊對齊 */
+}
+
+.member-profile .form-container {
+  flex: 1; /* 表單部分占據剩餘空間 */
+  margin-left: 20px; /* 表單與會員資料部分之間的間距 */
 }
 
 p {
   margin: 10px 0;
   font-weight: 800;
   font-size: 20px;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 22px;
-  cursor: pointer;
-  font-weight: 800;
 }
 
 input {
@@ -141,7 +146,34 @@ input {
   font-weight: 800;
 }
 
-.title {
-  color: #ffffff;
+.room-title {
+  margin-top: 20px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between; /* 使按鈕兩邊對齊，並分開 */
+  margin-top: 20px; /* 調整按鈕組的上邊距 */
+}
+
+.button-group button {
+  flex: 1; /* 按鈕寬度填滿父容器的寬度 */
+  margin: 0 10px; /* 在按鈕左右增加間距 */
+  padding: 10px 20px;
+  font-size: 22px;
+  cursor: pointer;
+  font-weight: 800;
+  border-radius: 5px;
+  background-color:#ff85b3;
+}
+button:hover {
+  background-color: #681736; /* 滑鼠懸停時的背景顏色 */
 }
 </style>

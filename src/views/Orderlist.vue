@@ -1,34 +1,31 @@
 <template>
-  <!-- 頁面標題 -->
   <h2 class="title">我的訂單</h2>
 
-  <!-- 會員資訊區域 -->
-  <div class="member-info p">會員名稱:{{ member.memberName }} 電話:{{ member.phone }} 信箱:{{ member.email }}</div>
+  <!-- 只有在 member 不為 null 時才顯示會員資料 -->
+  <div v-if="member" class="member-info p">
+    會員名稱: {{ member.memberName }} 電話: {{ member.phone }} 信箱: {{ member.email }}
+  </div>
+
   <div class="container">
-    <!-- 訂單表格區域 -->
     <table class="order-table">
       <thead>
         <tr>
-          <!-- 表頭列標題和排序功能 -->
           <th>訂單編號</th>
           <th>人數</th>
           <th @click="sort('orderDate')">
             訂位日期
-            <!-- 顯示排序方向的箭頭 -->
-            <span v-if="sortKey === 'orderDate'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+            <span v-if="sortKey === 'orderDate'" class="sort-arrow">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
           </th>
           <th @click="sort('startTime')">
             開始時間
-            <!-- 顯示排序方向的箭頭 -->
-            <span v-if="sortKey === 'startTime'">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
+            <span v-if="sortKey === 'startTime'"></span>
           </th>
           <th>結束時間</th>
           <th>歡唱時數</th>
-          <th>操作</th> <!-- 新增操作列 -->
+          <th>狀態</th>
         </tr>
       </thead>
       <tbody>
-        <!-- 使用 v-for 指令渲染每一行訂單 -->
         <tr v-for="order in sortedOrders" :key="order.orderId">
           <td>{{ order.orderId }}</td>
           <td>{{ order.numberOfPersons }}</td>
@@ -37,7 +34,8 @@
           <td>{{ order.endTime }}</td>
           <td>{{ order.hours }}</td>
           <td>
-            <button @click="cancelOrder(order.orderId)">取消訂單</button> <!-- 取消訂單按鈕 -->
+            <span v-if="order.status == '取消預約'" class="cancelled-text">已取消</span>
+            <button v-if="order.status != '取消預約'" class="cancel-button" @click="cancelOrder(order.orderId)">取消訂單</button>
           </td>
         </tr>
       </tbody>
@@ -47,40 +45,23 @@
 
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';  // 引入 Vue 的響應式 API
-import { useStore } from 'vuex';  // 引入 Vuex 用於狀態管理
-import axios from '../axios';  // 引入 axios 用於發送 HTTP 請求
-import Swal from 'sweetalert2';  // 引入 SweetAlert2 用於顯示彈窗
+import { ref, onMounted, computed } from 'vue';
+import { useStore } from 'vuex';
+import axios from '../axios';
+import Swal from 'sweetalert2';
 
-const store = useStore();  // 獲取 Vuex store 實例
-const orders = ref([]);  // 定義響應式數據用於存儲訂單列表
-const member = computed(() => store.getters.member);  // 計算屬性從 Vuex store 中獲取會員資訊
+const store = useStore();
+const orders = ref([]);
+const member = computed(() => store.getters.member);
+const cancelledOrders = ref([]);
 
-// 排序狀態
-const sortKey = ref('orderDate');  // 預設按訂位日期排序
-const sortOrder = ref('asc');  // 排序順序，預設為升序
+const sortKey = ref('orderDate');
+const sortOrder = ref('desc');
 
-// 分頁計算
-const start = ref(0);  // 數據起始位置
-const current = ref(1);  // 當前頁碼
-const rows = ref(10);  // 每頁顯示的行數
-const total = ref(0);  // 總記錄數
-const pages = ref(0);  // 總頁數
-const lastPageRows = ref(0);  // 最後一頁的記錄數
-
-// 異步函數獲取訂單列表
-async function orderList(page) {
-  if (page) {
-    start.value = page - 1;  // 計算起始記錄位置
-    current.value = page;  // 更新當前頁碼
-  } else {
-    start.value = 0;  // 預設從第一頁開始
-    current.value = 1;
-  }
-
+async function orderList() {
   const request = {
-    start: start.value,
-    max: rows.value,
+    start: 0,
+    max: 1000,
     dir: false,
     order: "orderId",
     memberId: member.value?.memberId || null,
@@ -90,10 +71,7 @@ async function orderList(page) {
 
   try {
     const response = await axios.post("http://localhost:8080/ktv-app/ktvbackend/orders/find", request);
-    orders.value = response.data.list;  // 更新訂單數據
-    total.value = response.data.count;  // 更新總記錄數
-    pages.value = Math.ceil(total.value / rows.value);  // 計算總頁數
-    lastPageRows.value = total.value % rows.value;  // 計算最後一頁的記錄數
+    orders.value = response.data.list;
   } catch (error) {
     Swal.fire({
       icon: "error",
@@ -104,32 +82,26 @@ async function orderList(page) {
   }
 }
 
-// 計算排序後的訂單列表
 const sortedOrders = computed(() => {
   return orders.value.slice().sort((a, b) => {
-    // 處理日期排序
     const aValue = sortKey.value === 'orderDate' ? new Date(a[sortKey.value]) : a[sortKey.value];
     const bValue = sortKey.value === 'orderDate' ? new Date(b[sortKey.value]) : b[sortKey.value];
     return sortOrder.value === 'asc' ? aValue - bValue : bValue - aValue;
   });
 });
 
-// 切換排序的函數
 function sort(key) {
   if (sortKey.value === key) {
-    // 如果當前排序字段和點擊字段一致，則切換排序順序
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc';
   } else {
-    // 如果當前排序字段和點擊字段不一致，則設置新的排序字段，預設為升序
     sortKey.value = key;
     sortOrder.value = 'asc';
   }
 }
 
-// 取消訂單的函數
 async function cancelOrder(orderId) {
   try {
-    const response = await axios.post(`http://localhost:8080/ktvbackend/orders/noCheckIn/${orderId}`, {});
+    const response = await axios.post("http://localhost:8080/ktv-app/ktvbackend/orders/noCheckIn/" + orderId, {});
     if (response.data.success) {
       Swal.fire({
         icon: "success",
@@ -137,8 +109,8 @@ async function cancelOrder(orderId) {
         text: response.data.message,
         showConfirmButton: true,
       });
-      // 重新加載訂單列表
-      await orderList(current.value);
+      cancelledOrders.value.push(orderId); // 更新已取消訂單列表
+      location.reload();//重新刷新頁面
     } else {
       Swal.fire({
         icon: "error",
@@ -157,115 +129,136 @@ async function cancelOrder(orderId) {
   }
 }
 
-// 在組件掛載後調用 orderList 函數
 onMounted(async () => {
-  await store.dispatch('fetchMemberProfile');
-  const memberData = store.getters.member;
-
   if (!member.value) {
-    await store.dispatch('fetchMemberProfile');  // 如果會員資訊不存在，則請求會員資訊
+    await store.dispatch('fetchMemberProfile');
   }
-  orderList();  // 獲取訂單列表
+  orderList();
 });
 </script>
 
-
 <style scoped>
 .container {
-  max-width: 1200px;
-  /* 調整容器的最大寬度 */
-  margin: 0 auto;
-  /* 使容器居中 */
-  padding: 20px;
-  /* 增加內邊距 */
-  color: #fff;
-  text-align: center;
-  /* 使容器內部的內容居中 */
+max-width: 1200px; /* 調整容器的最大寬度 */
+margin: 0 auto; /* 使容器居中 */
+padding: 20px; /* 增加內邊距 */
+color: #fff;
+text-align: center; /* 使容器內部的內容居中 */
 }
 
 .header {
-  display: flex;
-  justify-content: center;
-  /* 使標題居中 */
-  align-items: center;
-  margin-bottom: 20px;
-  font-weight: 800;
+display: flex;
+justify-content: center; /* 使標題居中 */
+align-items: center;
+margin-bottom: 20px;
+font-weight: 800;
 }
 
 h2 {
-  color: #ddd;
-  font-weight: 800;
-  margin: 0;
-  white-space: nowrap;
-  /* 防止換行 */
-  overflow: hidden;
-  /* 隱藏溢出的文字 */
-  text-overflow: ellipsis;
-  /* 顯示省略號以防文字溢出 */
+color: #ddd;
+font-weight: 800;
+margin: 0;
+white-space: nowrap; /* 防止換行 */
+overflow: hidden; /* 隱藏溢出的文字 */
+text-overflow: ellipsis; /* 顯示省略號以防文字溢出 */
 }
 
 .member-info {
-  margin-bottom: 20px;
-  /* 增加底部間距 */
-  padding: 20px;
-  /* 增加內邊距 */
+margin-bottom: 20px; /* 增加底部間距 */
+padding: 20px; /* 增加內邊距 */
 
-  color: #fff;
-  /* 文字顏色 */
-  border-radius: 8px;
-  /* 圓角 */
-  text-align: center;
-  /* 使文本居中 */
+color: #fff; /* 文字顏色 */
+border-radius: 8px; /* 圓角 */
+text-align: center; /* 使文本居中 */
 }
 
 .member-info p {
-  margin: 2px 0;
-  /* 增加上下間距 */
-  font-weight: 400;
-  /* 更改文字加粗程度 */
-  font-size: 24px;
-  /* 增加字體大小 */
+margin: 2px 0; /* 增加上下間距 */
+font-weight: 400; /* 更改文字加粗程度 */
+font-size: 24px; /* 增加字體大小 */
 }
 
 .order-table {
-  width: 100%;
-  /* 確保表格寬度與容器一致 */
-  border-collapse: collapse;
-  /* 使用 collapse 使邊框合併 */
-  border-radius: 8px;
-  /* 添加圓角 */
-  overflow: hidden;
-  /* 隱藏溢出的部分 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* 添加陰影 */
-  display: inline-table;
-  /* 使表格成為內聯塊元素，以便於居中 */
+width: 100%; /* 確保表格寬度與容器一致 */
+border-collapse: collapse; /* 使用 collapse 使邊框合併 */
+border-radius: 8px; /* 添加圓角 */
+overflow: hidden; /* 隱藏溢出的部分 */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加陰影 */
+display: inline-table; /* 使表格成為內聯塊元素，以便於居中 */
 }
 
 .order-table thead {
-  background-color: #4f51c4;
+background-color: #861641;
 }
 
-.order-table th,
+.order-table th, 
 .order-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-  font-weight: 800;
-  cursor: pointer;
-  /* 鼠标指针样式 */
+border: 1px solid #ddd;
+padding: 12px;
+text-align: center;
+font-weight: 800;
+cursor: pointer; /* 鼠标指针样式 */
 }
 
 .order-table th {
-  color: #fff;
+color: #fff;
 }
 
 .order-table tbody tr:hover {
-  background-color: #d49f9f;
+background-color: #ff85b3;
+}
+.title {
+margin-top: 5px;
+text-align: center;
+}
+/* 調整箭頭樣式 */
+.sort-arrow {
+  font-size: 18px; /* 調整箭頭大小 */
+  color: #fff; /* 調整箭頭顏色 */
+  margin-left: 5px; /* 調整箭頭與文本之間的間距 */
 }
 
-.title {
-  margin-top: 5px;
+.order-table th {
+  cursor: pointer; /* 更改表頭為可點擊樣式 */
+  position: relative; /* 使箭頭可以絕對定位在表頭 */
+}
+
+/* 可選的箭頭定位 */
+.order-table th span {
+  position: absolute;
+  right: 10px; /* 調整箭頭位置 */
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* 已取消文本的樣式 */
+.cancelled-text {
+  font-weight: bold; /* 設置字體粗細 */
+  color: #fff; /* 設置文本顏色，這裡使用紅色作為已取消的顯示顏色 */
+}
+
+/* 按鈕的樣式 */
+.cancel-button {
+  background-color: #861641; /* 按鈕背景顏色 */
+  color: white; /* 按鈕文字顏色 */
+  border: none; /* 去掉按鈕邊框 */
+  padding: 8px 16px; /* 設置按鈕內邊距 */
+  border-radius: 4px; /* 設置按鈕圓角 */
+  cursor: pointer; /* 設置鼠標懸停時的樣式 */
+  font-size: 14px; /* 設置按鈕文字大小 */
+  font-weight: bold; /* 設置字體粗細 */
+}
+
+/* 按鈕懸停樣式 */
+.cancel-button:hover {
+  background-color: #890096; /* 按鈕懸停時的背景顏色 */
+}
+.room-title {
   text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
 }
 </style>
