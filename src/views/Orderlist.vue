@@ -1,8 +1,8 @@
 <template>
-  <h2 class="title">我的訂單</h2>
+  <h5 class="room-title">我的訂單</h5>
 
   <!-- 只有在 member 不為 null 時才顯示會員資料 -->
-  <div v-if="member" class="member-info p">
+  <div v-if="member" hidden class="member-info p">
     會員名稱: {{ member.memberName }} 電話: {{ member.phone }} 信箱: {{ member.email }}
   </div>
 
@@ -35,7 +35,7 @@
           <td>{{ order.hours }}</td>
           <td>
             <span v-if="order.status == '取消預約'" class="cancelled-text">已取消</span>
-            <button v-if="order.status != '取消預約'" class="cancel-button" @click="cancelOrder(order.orderId)">取消訂單</button>
+            <button v-if="order.status != '取消預約'" class="cancel-button" @click="confirmCancelOrder(order.orderId)">取消訂單</button>
           </td>
         </tr>
       </tbody>
@@ -97,6 +97,22 @@ function sort(key) {
     sortKey.value = key;
     sortOrder.value = 'asc';
   }
+}
+function confirmCancelOrder(orderId) {
+  Swal.fire({
+    title: '確定要取消訂單嗎?',
+    text: "此操作不可恢復!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: '確認',
+    cancelButtonText: '取消'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      cancelOrder(orderId);
+    }
+  });
 }
 
 async function cancelOrder(orderId) {
@@ -253,9 +269,10 @@ text-align: center;
   background-color: #890096; /* 按鈕懸停時的背景顏色 */
 }
 .room-title {
+  margin-top: 40px;
   text-align: center;
   color: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   font-size: 28px;
   font-weight: bold;
   background: none;

@@ -68,19 +68,26 @@ export default {
 }
 
 .navbar-brand .logo {
-  margin-left: -60px;
-  margin-top: 5px;
+  margin-right: 80px;
+  margin-top: 8px;
+  margin-bottom: 10px;
   height: 80px;
   width: auto; /* 使 Logo 寬度適應導航列 */
   max-height: 100%; /* 確保 Logo 不超過導航列的高度 */
 }
 
 .navbar-nav .nav-item .nav-link {
-  color: #e0dfe0;
   font-weight: 600;
   margin-left: 1rem;
   margin-right: 1rem;
   position: relative;
+  
+  text-align: center;
+  color: #fff;
+
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px rgb(243, 207, 0);
 }
 
 .navbar-nav .nav-item .nav-link.active {
@@ -88,7 +95,7 @@ export default {
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-  color: #681736;
+  color: #db7f07;
 }
 
 .navbar-nav .nav-item .nav-link::after {

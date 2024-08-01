@@ -59,7 +59,7 @@ export default {
           this.$router.push('/member');  // 跳轉到會員基本資料頁面
         } else {
           const errorData = await response.text(); // 如果回應不成功，顯示錯誤訊息
-          this.message = `密碼錯誤 ${errorData}`;
+          this.message = `密碼錯誤！`;
         }
       } catch (error) {
         console.error('Error:', error); // 如果有錯誤，顯示錯誤訊息

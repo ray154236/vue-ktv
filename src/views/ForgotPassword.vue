@@ -133,8 +133,10 @@ button:hover {
 }
 
 p {
-  color: red; /* 段落文字顏色 */
+  color: #fff; /* 段落文字顏色 */
   margin-top: 20px; /* 段落頂部間距 */
+  font-weight: 800;
+  font-size: 18px;
 }
 .room-title {
   text-align: center;
