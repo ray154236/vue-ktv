@@ -1,5 +1,6 @@
 <template>
   <div class="container">   
+
     <form @submit.prevent="submitForm" class="form" v-if="member">
       <div class="form-group">
         <h1 class="room-title">線上訂位</h1>
@@ -81,6 +82,7 @@
       <button type="submit">訂位</button>
     </div>
     </form>
+
   </div>
 </template>
 
@@ -89,8 +91,10 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 export default {
+  
   computed: {
     member() {
       console.log('目前會員狀態:', this.$store.state.member);
@@ -155,6 +159,7 @@ export default {
       minDate: new Date().toISOString().split('T')[0]
     };
   },
+  
   methods: {
     calculateEndTime() {
   const startHour = parseInt(this.order.startTime, 10);
@@ -219,81 +224,67 @@ resetTime() {
     },
 
     submitForm() {
-      if (!this.isLoggedIn || !this.member) {
-        console.error('會員未登入或會員資料未加載');
-        return;
-      }
+  const orderData = {
+    ...this.order,
+    memberId: this.member.memberId,
+    createBy: this.member.memberId,
+    updateBy: this.member.memberId,
+    createTime: new Date().toISOString(),
+    startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
+  };
 
-      this.order.memberId = this.member.memberId;
-      this.order.createBy = this.member.memberId;
-      this.order.updateBy = this.member.memberId;
-      this.order.createTime = new Date().toISOString();
-      this.order.startTime = `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`;
-      
-      console.log('提交表單人數:', this.order.numberOfPersons);
-      console.log('提交的訂單:', this.order);
-
-      if (!this.order.numberOfPersons) {
-        alert('請選擇人數');
-        return;
-      }
-
-      this.addOrder()
-        .then(response => {
-          const responseData = response.data;
-          if (responseData.success) {
-            Swal.fire({
-              icon: 'success',
-              title: '訂位成功',
-              text: responseData.message,
-            }).then(() => {
-        this.$router.push({ path: '/orderlist' });
-      });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: '訂位失敗',
-              text: responseData.message,
-            });
-          }
-        })
-        .catch(error => {
-          console.error('Error message:', error.message);
-          Swal.fire({
-            icon: 'error',
-            title: '訂位失敗',
-            text: '訂位過程中發生錯誤。',
-          });
-        });
-    },
-
-    addOrder() {
-  return axios.post("/ktv-app/roomCheck", this.order)
+  // 发起第一次请求
+  axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
     .then(response => {
-      if (response.this.order.success) {
-        return axios.post("/ktv-app/ktvbackend/orders/testNewOrder", this.order);
+      console.log('roomCheck response:', response);
+
+      if (response.data.success) {
+        // 如果第一次请求成功，发起第二次请求
+        return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
       } else {
-        throw new Error(response.data.message);
+        // 如果第一次请求失败，显示提示框
+        return Swal.fire({
+          icon: 'question',
+          text: response.data.message,
+          allowOutsideClick: false,
+          showConfirmButton: true,
+          showCancelButton: true
+        }).then(result => {
+          if (result.isConfirmed) {
+            // 用户确认后发起第二次请求
+            return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
+          } else {
+            // 用户取消了操作，关闭弹窗
+            Swal.close();
+            // 返回一个空 Promise，以确保链式调用不会继续
+            return Promise.resolve();
+          }
+        });
       }
     })
     .then(response => {
-      if (response.data.success) {
+      if (response && response.data && response.data.success) {
+        // 如果第二次请求成功，显示成功提示并跳转
         return Swal.fire({
-          icon: "success",
-          text: response.data.message
+          icon: 'success',
+          title: '訂位成功',
+          text: response.data.message,
+        }).then(() => {
+          this.$router.push({ path: '/orderlist' });
         });
-      } else {
-        throw new Error(response.data.message);
-      }
+      } 
     })
     .catch(error => {
+      // 捕捉并处理任何错误
+      console.error('Error occurred:', error);
+
       Swal.fire({
-        icon: "error",
-        text: "新增失敗: " + error.message
+        icon: 'error',
+        title: '訂位失敗',
+        text: error.message || '訂位過程中發生錯誤。',
       });
     });
 },
-
     goBack() {
       this.$router.go(-1); // 返回到上一頁
     }
@@ -425,6 +416,7 @@ select:focus {
 button:hover {
   background-color: #681736;
 }
+
 button:active {
   transform: scale(0.98); /* 點擊時稍微縮小 */
 }

@@ -9,7 +9,6 @@
 
       <!-- 排序方式 -->
       <div class="ms-auto">
-        <label class="me-2">排列方式:</label>
         <select v-model="sortOrder" class="form-select">
           <option value="newest">新到舊 (上架日期)</option>
           <option value="oldest">舊到新 (上架日期)</option>
@@ -19,16 +18,17 @@
 
     <div class="news-grid">
       <div v-for="news in filteredNews" :key="news.newsId" class="news-item" @click="newsShow(news.newsId)">
-        <img :src="`/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`http://localhost:8080/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
         <div class="news-details">
           <p class="news-date">{{ formatDate(news.activityStartDate) }} 至 {{ formatDate(news.endDate) }}</p>
           <h3 class="news-title">{{ news.title }}</h3>
         </div>
       </div>
     </div>
+    <div class="button-group">
     <!-- 返回按鈕 -->
-    <button type="button" @click="goHome" class="return-button">返回首頁</button>
-
+    <button type="button" @click="goHome" >返回首頁</button>
+  </div>
   </div>
 </template>
 
@@ -194,5 +194,29 @@ export default {
   color: #888;
   margin-bottom: 15px;
 }
+.button-group {
+  display: flex;
+  justify-content: space-between; /* 使按鈕兩邊對齊，並分開 */
+  
+}
+.button-group button {
+  flex: 1; /* 按鈕寬度填滿父容器的寬度 */
+  margin: 0 450px; /* 在按鈕左右增加間距 */
+  text-align: center;
+  padding: 4px 20px;
+  padding-bottom: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 800;
+  border-radius: 4px;
+  background-color:#f06292;
+  height: 40px;
+  color: white;
+  margin-top: 50px;
 
+}
+
+button:hover {
+  background-color: #681736;
+}
 </style>
