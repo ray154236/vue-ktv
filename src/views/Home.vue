@@ -13,27 +13,34 @@
   
   <!-- 歌曲排行榜表格區域 -->
   <div class="song-ranking mt-4">
-    <h2>熱門歌曲 Top 10</h2>
+    <h1 class="title">本周歌曲排行榜</h1>
     <table>
       <thead>
         <tr>
           <th>排名</th>
-          <th>歌曲標題</th>
+          <th>歌名</th>
           <th>歌手</th>
-          <th>專輯</th>
-          <th>播放次數</th>
+          <th>上周排名</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(song, index) in songs" :key="index">
-          <td>{{ index + 1 }}</td>
+        <tr v-for="song in pagedSongs" :key="song.title">
+          <td>{{ song.id }}</td>
           <td>{{ song.title }}</td>
           <td>{{ song.artist }}</td>
-          <td>{{ song.album }}</td>
-          <td>{{ song.plays }}</td>
+          <td>{{ song.lastWeekRank }}</td>
         </tr>
       </tbody>
     </table>
+    <div class="page">第 {{ currentPage }} 頁/共 {{ totalPages }} 頁</div>
+    <div class="changepage">
+    <div class="pagination">
+      <button @click="goToPage(1)" :disabled="currentPage === 1"><<</button>
+      <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"><</button>
+      <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
+      <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -47,19 +54,51 @@ export default {
       activeSlides: [],  // 存儲所有激活的輪播項目
       activeIndex: 0,    // 初始化為第一個輪播項目的索引
       intervalId: null, // 存儲定時器 ID，用於控制自動輪播
-      songs: [  // 硬編碼的歌曲排行榜數據
-        { title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', album: '單曲', plays: '29251' },
-        { title: '星期五晚上', artist: 'Energy', album: '單曲', plays: '20196' },
-        { title: '擱淺', artist: '周杰倫', album: '單曲', plays: '67060' },
-        { title: '妥協', artist: '蔡依林', album: '單曲', plays: '44474' },
-        { title: '字字句句', artist: '盧盧快閉嘴', album: '單曲', plays: '28770' },
-        { title: '天后', artist: '陳勢安', album: '單曲', plays: '45744' },
-        { title: '如果可以', artist: '韋禮安', album: '單曲', plays: '27349' },
-        { title: '訣愛', artist: 'Faye 詹雯婷', album: '單曲', plays: '28432' },
-        { title: '倒帶', artist: '蔡依林', album: '單曲', plays: '66844' },
-        { title: '毒藥', artist: '蕭秉治', album: '單曲', plays: '27530' },
-      ]
+      songs:[
+  { id: 1, title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', lastWeekRank: "1 →" },
+  { id: 2, title: '擱淺', artist: '周杰倫', lastWeekRank: "3 ↑" },
+  { id: 3, title: '妥協', artist: '蔡依林', lastWeekRank: "4 ↑" },
+  { id: 4, title: '字字句句', artist: '盧盧快閉嘴', lastWeekRank: "5 ↓" },
+  { id: 5, title: '星期五晚上', artist: 'Energy', lastWeekRank: "2 ↓" },
+  { id: 6, title: '毒藥', artist: '蕭秉治', lastWeekRank: "10 ↑" },
+  { id: 7, title: '天后', artist: '陳勢安', lastWeekRank: "6 ↓" },
+  { id: 8, title: '倒帶', artist: '蔡依林', lastWeekRank: "9 ↑" },
+  { id: 9, title: '如果可以', artist: '韋禮安', lastWeekRank: "14 ↑" },
+  { id: 10, title: '訣愛', artist: 'Faye 詹雯婷', lastWeekRank: "8 ↓" },
+  { id: 11, title: '嘉賓', artist: '張遠', lastWeekRank: "11 →" },
+  { id: 12, title: '慢冷', artist: '梁靜茹', lastWeekRank: "15 ↑" },
+  { id: 13, title: '從前說', artist: '小阿七', lastWeekRank: "12 ↓" },
+  { id: 14, title: '我很好騙', artist: '動力火車', lastWeekRank: "16 ↑" },
+  { id: 15, title: '離開的一路上', artist: '理想混蛋', lastWeekRank: "13 ↓" },
+  { id: 16, title: '想和你看五月的晚霞', artist: '陳華 Hua Chen', lastWeekRank: "18 ↑" },
+  { id: 17, title: '我會等', artist: '承桓', lastWeekRank: "17 →" },
+  { id: 18, title: '家家酒', artist: '家家', lastWeekRank: "20 ↑" },
+  { id: 19, title: '痴心絕對', artist: '李聖傑', lastWeekRank: "21 ↑" },
+  { id: 20, title: '我懷念的', artist: '孫燕姿', lastWeekRank: "19 ↓" },
+  { id: 21, title: '摯友', artist: 'A-Lin', lastWeekRank: "23 ↑" },
+  { id: 22, title: '十年', artist: '陳奕迅', lastWeekRank: "28 ↑" },
+  { id: 23, title: '專屬天使', artist: 'TANK', lastWeekRank: "22 ↓" },
+  { id: 24, title: '雨愛', artist: '楊丞琳', lastWeekRank: "25 ↓" },
+  { id: 25, title: '體面', artist: '于文文', lastWeekRank: "27 ↑" },
+  { id: 26, title: 'Without You', artist: '高爾宣OSN', lastWeekRank: "26 →" },
+  { id: 27, title: '總會有人', artist: '向思思', lastWeekRank: "24 ↓" },
+  { id: 28, title: '孤勇者', artist: '陳奕迅', lastWeekRank: "33 ↑" },
+  { id: 29, title: '修煉愛情', artist: '林俊傑', lastWeekRank: "29 →" },
+  { id: 30, title: '給我一個理由忘記', artist: 'A-Lin', lastWeekRank: "25 ↓" }
+],
+      currentPage: 1,   // 當前頁碼
+      pageSize: 10       // 每頁顯示的項目數量
     };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.songs.length / this.pageSize);
+    },
+    pagedSongs() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.songs.slice(start, end);
+    }
   },
   created() {
     this.fetchSlides();  // 在組件創建時，調用 fetchSlides 方法獲取輪播項目數據
@@ -121,6 +160,10 @@ export default {
     nextSlide() {
       // 切換到下一張大圖輪播項目
       this.activeIndex = (this.activeIndex + 1) % this.activeSlides.length;
+    },
+    goToPage(page) {
+      if (page < 1 || page > this.totalPages) return;  // 檢查頁碼是否合法
+      this.currentPage = page;
     }
   },
   watch: {
@@ -140,7 +183,7 @@ export default {
 }
 .carousel-item img {
   width: 80%;
-  height: auto;
+  height: 700px;
   border-radius: 8px;
 }
 .carousel-indicators li {
@@ -206,5 +249,72 @@ export default {
 .song-ranking tr:hover {
   background-color: rgba(255, 255, 255, 0.2); /* 懸停行的背景顏色 */
 }
-</style>
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+.table th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+.pagination button {
+  background-color: transparent; /* 使按鈕背景透明 */
+  border: 1px solid #ddd; /* 設置邊框顏色 */
+  color: white; /* 設置按鈕文字顏色為白色 */
+  padding: 5px 10px; /* 添加內邊距 */
+  cursor: pointer; /* 鼠標懸停時顯示手形光標 */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 添加過渡效果 */
+  color: white; /* 設置文字顏色為白色 */
+  margin-top: 10px; /* 添加上邊距 */
+}
 
+.pagination button:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* 懸停時的背景顏色 */
+  color: white; /* 懸停時的文字顏色 */
+}
+
+/* 使中間標顯示為白色 */
+.page {
+text-align: center
+}
+.title {
+  text-align: center;
+  color: #fff;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
+  font-size: 40px;
+} 
+.changepage {
+  display: flex;
+  justify-content: center; /* 置中水平排列 */
+  margin: 20px 0; /* 上下邊距 */
+}
+
+.pagination {
+  display: flex;
+  gap: 10px; /* 按鈕之間的間距 */
+}
+
+button {
+  padding: 10px 20px; /* 按鈕的內邊距 */
+  border: 1px solid #ccc; /* 按鈕的邊框 */
+  border-radius: 5px; /* 按鈕的圓角 */
+  background-color: #f0f0f0; /* 按鈕的背景色 */
+  cursor: pointer; /* 鼠標懸停時顯示手形光標 */
+  transition: background-color 0.3s; /* 背景色過渡效果 */
+}
+
+button:hover {
+  background-color: #e0e0e0; /* 鼠標懸停時的背景色 */
+}
+
+button:disabled {
+  background-color: #d0d0d0; /* 禁用狀態下的背景色 */
+  cursor: not-allowed; /* 禁用狀態下顯示不可點擊光標 */
+}
+
+</style>
