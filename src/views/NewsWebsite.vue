@@ -1,11 +1,10 @@
 <template>
   <div class="news-container">
-    <h1 class="news-heading">最新消息</h1>
+    <h1 class="room-title">最新消息</h1>
     <div class="search-sort-container">
       <!-- 標題模糊查詢 -->
       <div class="d-flex align-items-center">
-        <input type="text" v-model="searchKeyword" placeholder="標題關鍵字" class="form-control me-2">
-        <button @click="searchByTitle" class="btn btn-primary">搜尋</button>
+        <input type="text" v-model="searchKeyword" placeholder="請輸入標題關鍵字" class="form-control me-2">
       </div>
 
       <!-- 排序方式 -->
@@ -22,14 +21,14 @@
       <div v-for="news in filteredNews" :key="news.newsId" class="news-item" @click="newsShow(news.newsId)">
         <img :src="`/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
         <div class="news-details">
-          <p class="news-date">{{ formatDate(news.startDate) }} 至 {{ formatDate(news.endDate) }}</p>
+          <p class="news-date">{{ formatDate(news.activityStartDate) }} 至 {{ formatDate(news.endDate) }}</p>
           <h3 class="news-title">{{ news.title }}</h3>
         </div>
       </div>
     </div>
-
     <!-- 返回按鈕 -->
     <button type="button" @click="goHome" class="return-button">返回首頁</button>
+
   </div>
 </template>
 
@@ -129,14 +128,16 @@ export default {
   padding: 20px;
 }
 
-.news-heading {
+.room-title {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  font-family: 'Roboto', sans-serif;
-  color: #ffffff;
-  text-transform: uppercase;
-}
+  color: #fff;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  background: none;
+  text-shadow: 3px 3px 6px orange;
+}  
 
 .search-sort-container {
   display: flex;
@@ -194,21 +195,4 @@ export default {
   margin-bottom: 15px;
 }
 
-.return-button {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 24px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.return-button:hover {
-  background-color: #0056b3;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
 </style>

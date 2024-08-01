@@ -17,9 +17,8 @@
       <!-- 有效期限 -->
       <div class="news-dates">
         <label>活動時間:</label>
-        <input type="text" :value="formatDateRange(news.startDate, news.endDate)" disabled>
+        <div class="mid">{{ formatDateRange(news.activityStartDate, news.endDate) }}</div>
       </div>
-
       <!-- 返回按鈕 -->
       <button type="button" @click="goToNewsList" class="return-button button-large">返回最新消息</button>
     </div>
@@ -41,6 +40,7 @@ export default {
         startDate: '',
         endDate: '',
         url: '',
+        activityStartDate:'',
         imageUrl: null
       }
     };
@@ -54,7 +54,7 @@ export default {
         .then(response => {
           this.news = {
             ...response.data,
-            startDate: this.formatDate(response.data.startDate),
+            activityStartDate: this.formatDate(response.data.activityStartDate),
             endDate: this.formatDate(response.data.endDate)
           };
         })
@@ -65,8 +65,8 @@ export default {
     formatDate(dateString) {
       return moment(dateString).format('YYYY-MM-DD');
     },
-    formatDateRange(startDate, endDate) {
-      return `${this.formatDate(startDate)} 至 ${this.formatDate(endDate)}`;
+    formatDateRange(activityStartDate, endDate) {
+      return `${this.formatDate(activityStartDate)} 至 ${this.formatDate(endDate)}`;
     },
     goToNewsList() {
       this.$router.push({ name: 'NewsWebsite' });
@@ -172,7 +172,7 @@ export default {
   /* 水平居中 */
   width: 200px;
   padding: 10px;
-  background-color: #007BFF;
+  background-color:#f06292;
   color: white;
   border: none;
   border-radius: 3px;
@@ -187,9 +187,7 @@ export default {
 }
 
 .return-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-  /* 放大效果 */
+  background-color: #681736;
 }
 
 /* 動畫效果 */
@@ -213,5 +211,12 @@ export default {
     transform: translateY(0);
     opacity: 1;
   }
+  mid {
+  text-align: center; /* 将输入框中的文本居中 */
+  border: 1px solid #ddd; /* 可选: 设置边框 */
+  border-radius: 5px; /* 可选: 设置圆角边框 */
+  padding: 5px; /* 可选: 设置内边距 */
+  width: 100%; /* 确保输入框宽度填满容器 */
+}
 }
 </style>
