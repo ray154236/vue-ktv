@@ -5,7 +5,7 @@
       <h5 class="room-title">重設密碼</h5> 
     <form @submit.prevent="resetPassword">
       <div class="input-group">
-        <label for="newPassword">請輸入新密碼</label>
+        <label for="newPassword">請輸入新密碼：</label>
         <input type="password" id="newPassword" v-model="newPassword" required />
       </div>
       <button type="submit">重設密碼</button>

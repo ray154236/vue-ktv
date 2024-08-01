@@ -5,11 +5,11 @@
       <form @submit.prevent="handleSubmit"> <!-- 登入表單，防止默認提交 -->
         <div class="input-group">
           <label for="idNumber">身分證字號：</label> <!-- 身分證字號標籤 -->
-          <input v-model="idNumber" type="text" id="idNumber" required /> <!-- 輸入身分證字號 -->
+          <input v-model="idNumber" type="text" id="idNumber" required autocomplete="username" /> <!-- 輸入身分證字號 -->
         </div>
         <div class="input-group">
           <label for="password">密碼：</label> <!-- 密碼標籤 -->
-          <input v-model="password" type="password" id="password" required /> <!-- 輸入密碼 -->
+          <input v-model="password" type="password" id="password" required autocomplete="current-password" /> <!-- 輸入密碼 -->
         </div>
        
 
@@ -75,7 +75,7 @@ export default {
   display: flex; /* 使用 Flexbox 進行排版 */
   justify-content: center; /* 水平置中 */
   align-items: center; /* 垂直置中 */
-  min-height: 60vh; /* 最小高度為螢幕高度的 80% */
+  min-height: 60vh; /* 最小高度為螢幕高度的 60% */
   background: none; /* 保持網頁原背景 */
 }
 

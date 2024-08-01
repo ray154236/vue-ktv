@@ -4,7 +4,7 @@
     <div v-if="member">
       <p><strong>會員編號:</strong> {{ member.memberId }}</p>
       <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
-      <p><strong>帳號:</strong> {{ member.idNumber }}</p>
+      <p><strong>身分證字號:</strong> {{ member.idNumber }}</p>
       <p><strong>密碼:</strong> ***********</p> <!-- 密碼不顯示 -->
       <p><strong>會員名稱:</strong> {{ editable ? editedMember.memberName : member.memberName }}</p>
       <p><strong>電話:</strong> {{ editable ? editedMember.phone : member.phone }}</p>
@@ -172,6 +172,9 @@ input {
   font-weight: 800;
   border-radius: 5px;
   background-color:#ff85b3;
+  display: flex; /* 使用 Flexbox 來對齊文字 */
+  align-items: center; /* 垂直置中 */
+  justify-content: center; /* 水平置中 */
 }
 button:hover {
   background-color: #681736; /* 滑鼠懸停時的背景顏色 */

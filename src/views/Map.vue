@@ -120,26 +120,27 @@ export default {
 }
 
 .store-info h2 {
-  margin-bottom: 10px;
+ margin-left: -20px;
   font-size: 48px;
   font-weight: 800;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   background: none;
   text-shadow: 3px 3px 6px orange;
 }
 
 .store-info p {
   margin: 5px 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
+  height: 50px;
 }
 
 .info-button {
-  margin-top: 10px;
+  margin-top: -20px;
   margin-left: 200px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
-  width: 100px; /* 調整按鈕的寬度 */
+  width: 120px; /* 調整按鈕的寬度 */
   height: 50px; /* 調整按鈕的高度 */
   background-color: #ff85b3; /* 粉紅色 */
   color: white;

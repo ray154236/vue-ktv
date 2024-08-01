@@ -10,7 +10,7 @@
       <div class="profile-info">
         <div v-if="member" class="info-list">
           <p><strong>會員編號:</strong> {{ member.memberId }}</p>
-          <p><strong>帳號:</strong> {{ member.idNumber }}</p>
+          <p><strong>身分證字號:</strong> {{ member.idNumber }}</p>
           <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
           <p><strong>電話:</strong> {{ member.phone }}</p>
           <p><strong>生日:</strong> {{ formatDate(member.birth) }}</p>
@@ -200,7 +200,6 @@ onMounted(async () => {
   font-weight: 800;
   color: #ffffff;
 }
-
 .member-actions {
  margin-top: 20px;
   display: flex;
@@ -208,7 +207,6 @@ onMounted(async () => {
   align-items: flex-start;
   flex-basis: 200px;
 }
-
 .member-actions button {
   margin-bottom: 15px;
   padding: 12px 24px;
@@ -216,6 +214,7 @@ onMounted(async () => {
   cursor: pointer;
   border: none;
   border-radius: 5px;
+  color: #fff;
   background-color: #ff85b3;
   font-weight: 800;
   transition: background-color 0.3s, transform 0.2s;
