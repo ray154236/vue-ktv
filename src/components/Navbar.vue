@@ -64,7 +64,7 @@ export default {
   box-shadow: 0 2px 4px rgba(248, 246, 246, 0.1);
   min-height: 100px;
   max-height: 100px;
-  background-image: url('/src/assets/background2.jpg');
+  background-image: url('/src/assets/background10.jpg');
 }
 
 .navbar-brand .logo {
