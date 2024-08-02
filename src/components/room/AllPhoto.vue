@@ -19,6 +19,10 @@
       <div v-if="isInformationVisible" class="overlay" @click.self="hideInformation">
         <div class="alert-popup">
           <p>
+            <h5>包廂收費：</h5>
+            包廂基本為三小時收費，如有超時依各包廂小時計算。<br> 
+          </p>
+          <p>
             <h5>包廂類型：</h5>
             小型包廂：適合小型聚會，通常可以容納6人。<br>  
             中型包廂：適合家庭或小型聚會，容納7-10人。<br>

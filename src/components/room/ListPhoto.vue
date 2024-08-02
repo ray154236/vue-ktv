@@ -6,7 +6,7 @@
            @mouseleave="startAutoSlide">
         <div class="carousel-images" :style="carouselStyles">
           <div v-for="photo in photos" :key="photo.id" class="carousel-slide">
-            <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" @click="callout" />
+            <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" @click="callOut" />
           </div>
         </div>
         <button @click="prevSlide" class="carousel-button prev">&#10094;</button>
@@ -74,7 +74,7 @@
   // Set up automatic slide change every 3 seconds
   let intervalId = null;
   
-  function callout(){
+  function callOut(){
     console.log("看要不要製作跳轉介面");
   }
 
