@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       '/ktv-app/api': {
         //target: 'http://localhost:8080',  // 你的後端 API 伺服器地址
-        target: 'https://goldpandaktv-946a9973cdde.herokuapp.com/',//後端公共服務器
+        target: 'https://goldpandaktv.herokuapp.com',//後端公共服務器
         changeOrigin: true,
         pathRewrite: { '^/ktv-app/api': '' },  // 請求轉發到 API 路徑，移除 `/ktv-app/api`
         assetsInclude: ['**/*.jpg', '**/*.png']  // 確保處理圖片文件
