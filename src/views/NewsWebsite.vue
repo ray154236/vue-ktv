@@ -72,23 +72,23 @@ export default {
       return new Date(date).toLocaleDateString('zh-TW');
     },
     fetchNews() {
-      axios.get('http://localhost:8080/ktv-app/news/news')
-        .then(response => {
-          this.newsList = response.data.filter(news => news.status === 'active').map(news => {
-            return {
-              ...news,
-              url: news.url ? news.url : '#',
-            };
-          });
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: 'error',
-            title: '錯誤',
-            text: '無法獲取新聞資料，請稍後再試。',
-          });
-        });
-    },
+  axios.get('http://localhost:8080/ktv-app/news/news')
+    .then(response => {
+      this.newsList = response.data.list.filter(news => news.status === 'active').map(news => {
+        return {
+          ...news,
+          url: news.url ? news.url : '#',
+        };
+      });
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤',
+        text: '無法獲取新聞資料，請稍後再試。',
+      });
+    });
+},
     newsShow(newsId) {
       this.$router.push({ name: 'NewsShow', params: { newsId: newsId } });
     },

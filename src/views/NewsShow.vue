@@ -6,7 +6,7 @@
 
       <!-- 新聞圖片 -->
       <div class="news-image">
-        <img class="large-image" :src="`http://localhost:8080/ktv-app/news/news/image/${news.newsId}`" alt="新聞圖片">
+        <img :src="`http://localhost:8080/ktv-app/news/news/image/${newsId}`" class="news-image" alt="新聞圖片">
       </div>
 
       <!-- 新聞內容 -->
@@ -50,18 +50,27 @@ export default {
   },
   methods: {
     fetchNewsDetails() {
-      axios.get(`http://localhost:8080/ktv-app/news/news/find/${this.newsId}`)
-        .then(response => {
-          this.news = {
-            ...response.data,
-            activityStartDate: this.formatDate(response.data.activityStartDate),
-            endDate: this.formatDate(response.data.endDate)
-          };
-        })
-        .catch(error => {
-          console.error('獲取新聞詳情時發生錯誤:', error);
-        });
-    },
+  axios.get(`http://localhost:8080/ktv-app/news/find/${this.newsId}`)
+    .then(response => {
+      const news = response.data.news; 
+      console.log('獲取到的新聞數據:', news); // 調試數據
+
+      this.news = {
+        ...news,
+        activityStartDate: this.formatDate(news.activityStartDate),
+        endDate: this.formatDate(news.endDate),
+        imageUrl: news.image ? `data:image/jpeg;base64,${news.image}` : null
+      };
+    })
+    .catch(error => {
+      console.error('獲取新聞詳情時發生錯誤:', error);
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤',
+        text: '無法獲取新聞資料，請稍後再試。',
+      });
+    });
+},
     formatDate(dateString) {
       return moment(dateString).format('YYYY-MM-DD');
     },
