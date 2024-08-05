@@ -233,16 +233,16 @@ resetTime() {
     startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
   };
 
-  // 发起第一次请求
+  // 發起第一次請求
   axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
     .then(response => {
       console.log('roomCheck response:', response);
 
       if (response.data.success) {
-        // 如果第一次请求成功，发起第二次请求
+        // 如果第一次請求成功，發起第二次請求
         return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
       } else {
-        // 如果第一次请求失败，显示提示框
+        // 如果第一次請求失敗，顯示提示框
         return Swal.fire({
           icon: 'question',
           text: response.data.message,
@@ -251,12 +251,12 @@ resetTime() {
           showCancelButton: true
         }).then(result => {
           if (result.isConfirmed) {
-            // 用户确认后发起第二次请求
+            // 使用者確認後發起第二次請求
             return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
           } else {
-            // 用户取消了操作，关闭弹窗
+            // 使用者取消了操作，關閉彈窗
             Swal.close();
-            // 返回一个空 Promise，以确保链式调用不会继续
+            // 返回一個空的 Promise，以確保鏈式調用不會繼續
             return Promise.resolve();
           }
         });
@@ -264,7 +264,7 @@ resetTime() {
     })
     .then(response => {
       if (response && response.data && response.data.success) {
-        // 如果第二次请求成功，显示成功提示并跳转
+        // 如果第二次請求成功，顯示成功提示並跳轉
         return Swal.fire({
           icon: 'success',
           title: '訂位成功',
@@ -275,7 +275,7 @@ resetTime() {
       } 
     })
     .catch(error => {
-      // 捕捉并处理任何错误
+     // 捕捉並處理任何錯誤
       console.error('Error occurred:', error);
 
       Swal.fire({

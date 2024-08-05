@@ -217,11 +217,11 @@ export default {
     opacity: 1;
   }
   mid {
-  text-align: center; /* 将输入框中的文本居中 */
-  border: 1px solid #ddd; /* 可选: 设置边框 */
-  border-radius: 5px; /* 可选: 设置圆角边框 */
-  padding: 5px; /* 可选: 设置内边距 */
-  width: 100%; /* 确保输入框宽度填满容器 */
+  text-align: center; /* 將輸入框中的文本置中 */
+  border: 1px solid #ddd; /* 可選: 設置邊框 */
+  border-radius: 5px; /* 可選: 設置圓角邊框 */
+  padding: 5px; /* 可選: 設置內邊距 */
+  width: 100%; /* 確保輸入框寬度填滿容器 */
 }
 }
 </style>
