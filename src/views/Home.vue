@@ -185,7 +185,7 @@ export default {
 
 .carousel-item img {
   width: 80%;
-  height: 700px;
+  height: 600px;
   border-radius: 8px;
 }
 
