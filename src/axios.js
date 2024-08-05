@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: import.meta.env.VITE_APP_API_BASE_URL || '/ktv-app/api',
+    baseURL: import.meta.env.VITE_APP_API_BASE_URL || '/ktv-app',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json'

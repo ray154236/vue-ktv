@@ -36,7 +36,7 @@ export default {
       }
 
       try {
-        await axios.post('/reset-password', {
+        await axios.post('/api/reset-password', {
           token,
           newPassword: this.newPassword
         });

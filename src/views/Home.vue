@@ -117,14 +117,14 @@ export default {
   },
   methods: {
     fetchSlides() {
-  axios.get('http://localhost:8080/ktv-app/news/news')
+  axios.get('/ktv-app/news/news')
     .then(response => {
-      if (response.data && Array.isArray(response.data.list)) {
-        this.activeSlides = response.data.list
+      if (response.data && Array.isArray(response.data)) {
+        this.activeSlides = response.data
           .filter(news => news.status === 'active')
           .map((news, index) => ({
-            image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
-            smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
+            image: `/ktv-app/news/news/image/${news.newsId}`,
+            smallImage: `/ktv-app/news/news/${news.newsId}/smallImage`,
             altText: `Slide ${index + 1}`,
             newsId: news.newsId,
             active: index === 0
@@ -239,7 +239,6 @@ export default {
 .song-ranking {
   margin-top: 20px;
   padding: 10px;
-  background-image: url('http://localhost:8080/ktv-app/news/news/image/background-image.jpg');
   /* 替換為你的背景圖片路徑 */
   background-size: cover;
   /* 使背景圖片覆蓋整個區域 */

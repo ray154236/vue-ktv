@@ -34,7 +34,7 @@
   import axios from 'axios';
   
   function fetchPhotos() {
-    return axios.get('http://localhost:8080/ktv-app/photos/findAll')
+    return axios.get('/ktv-app/photos/findAll')
       .then(response => response.data)
       .catch(error => {
         console.error('Error fetching photos:', error);

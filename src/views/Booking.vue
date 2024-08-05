@@ -224,23 +224,23 @@ resetTime() {
     },
 
     submitForm() {
-  const orderData = {
-    ...this.order,
-    memberId: this.member.memberId,
-    createBy: this.member.memberId,
-    updateBy: this.member.memberId,
-    createTime: new Date().toISOString(),
-    startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
-  };
-
+    const orderData = {
+      ...this.order,
+      memberId: this.member.memberId,
+      createBy: this.member.memberId,
+      updateBy: this.member.memberId,
+      createTime: new Date().toISOString(),
+      startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
+    };
+    console.log("orderData", orderData)
   // 发起第一次请求
-  axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
+  axios.post('/ktv-app/roomCheck', orderData)
     .then(response => {
       console.log('roomCheck response:', response);
 
       if (response.data.success) {
         // 如果第一次请求成功，发起第二次请求
-        return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
+        return axios.post('/ktv-app/ktvbackend/orders/testNewOrder', orderData);
       } else {
         // 如果第一次请求失败，显示提示框
         return Swal.fire({
@@ -252,7 +252,7 @@ resetTime() {
         }).then(result => {
           if (result.isConfirmed) {
             // 用户确认后发起第二次请求
-            return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
+            return axios.post('/ktv-app/ktvbackend/orders/testNewOrder', orderData);
           } else {
             // 用户取消了操作，关闭弹窗
             Swal.close();
@@ -261,6 +261,8 @@ resetTime() {
           }
         });
       }
+    }).catch(function(error) {
+      console.log("newOrderError = ", error.message)
     })
     .then(response => {
       if (response && response.data && response.data.success) {

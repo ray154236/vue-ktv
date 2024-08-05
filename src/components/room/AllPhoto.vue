@@ -65,6 +65,7 @@
           class="photo-item"
           @click="showPhotoDetails(photo)"
         >
+        <!-- <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" /> -->
           <img :src="`data:image/jpeg;base64,${photo.photoFile}`" :alt="photo.description" />
         </div>
       </div>
@@ -94,8 +95,9 @@ const isRoomAmountVisible = ref(false);
 
 async function fetchPhotos() {
   try {
-    const response = await axios.get('http://localhost:8080/ktv-app/photos/findAll');
+    const response = await axios.get('/ktv-app/photos/findAll');
     photos.value = response.data;
+    console.log("photos.value = ", response.data)
   } catch (error) {
     console.error('Error fetching photos:', error);
     photos.value = [];

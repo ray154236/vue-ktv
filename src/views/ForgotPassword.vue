@@ -36,7 +36,7 @@ export default {
   methods: {
     async sendForgotPasswordRequest() {
       try {
-        const response = await axios.post('/forgot-password', {  // 使用相對於 baseURL 的路徑
+        const response = await axios.post('/api/forgot-password', {  // 使用相對於 baseURL 的路徑
           idNumber: this.idNumber,
           email: this.email
         });

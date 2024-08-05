@@ -62,7 +62,7 @@
     formData.append('photoName', photoName.value);
     formData.append('photoFile', photoFile.value);
   
-    axios.post('http://localhost:8080/ktv-app/photos/uploadPost', formData, {
+    axios.post('/photos/uploadPost', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
     .then(function(response) {
