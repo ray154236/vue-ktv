@@ -102,14 +102,13 @@ export default {
     margin-bottom: 5px;
     font-size: 22px;
     font-weight: bold;
-    color: #ffffff;
+    color: #fff;
 }
 
 .input-group input {
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -118,19 +117,26 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    padding-left: 30px;
 }
 
 .button-group button {
     flex: 1;
+    /* 按鈕寬度填滿父容器的寬度 */
     margin: 0 10px;
-    padding: 10px;
-    font-size: 24px;
+    /* 在按鈕左右增加間距 */
+    padding: 10px 20px;
+    font-size: 22px;
     cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff85b3;
-    color: white;
     font-weight: 800;
+    border-radius: 5px;
+    background-color: #f06292;
+    display: flex;
+    /* 使用 Flexbox 來對齊文字 */
+    align-items: center;
+    /* 垂直置中 */
+    justify-content: center;
+    /* 水平置中 */
 }
 
 .button-group button:hover {

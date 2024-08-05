@@ -226,9 +226,9 @@ onMounted(async () => {
 .member-actions button {
   margin-bottom: 15px;
   /* 按鈕之間的間距 */
-  padding: 12px 24px;
+  padding: 18px 24px;
   /* 內邊距統一 */
-  font-size: 16px;
+  font-size: 22px;
   /* 統一字體大小 */
   cursor: pointer;
   border: none;
