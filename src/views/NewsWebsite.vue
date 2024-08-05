@@ -26,9 +26,9 @@
       </div>
     </div>
     <div class="button-group">
-    <!-- 返回按鈕 -->
-    <button type="button" @click="goHome" >返回首頁</button>
-  </div>
+      <!-- 返回按鈕 -->
+      <button type="button" @click="goHome">返回首頁</button>
+    </div>
   </div>
 </template>
 
@@ -72,30 +72,30 @@ export default {
       return new Date(date).toLocaleDateString('zh-TW');
     },
     fetchNews() {
-  axios.get('/ktv-app/news/news')
-    .then(response => {
-      console.log('原始數據:', response.data);
-      this.newsList = response.data.filter(news => news.status === 'active').map(news => {
-        return {
-          ...news,
-          url: news.url ? news.url : '#',
-        };
-      });
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: '錯誤',
-        text: error.message,
-      });
-    });
-},
+      axios.get('http://localhost:8080/ktv-app/news/news')
+        .then(response => {
+          console.log('原始數據:', response.data);
+          this.newsList = response.data.filter(news => news.status === 'active').map(news => {
+            return {
+              ...news,
+              url: news.url ? news.url : '#',
+            };
+          });
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: '錯誤',
+            text: error.message,
+          });
+        });
+    },
     newsShow(newsId) {
       this.$router.push({ name: 'NewsShow', params: { newsId: newsId } });
     },
     searchByTitle() {
       if (this.searchKeyword.trim() !== '') {
-        axios.get(`/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
+        axios.get(`http://localhost:8080/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
           .then(response => {
             this.newsList = response.data.filter(news => news.status === 'active').map(news => {
               return {
@@ -138,7 +138,7 @@ export default {
   font-weight: bold;
   background: none;
   text-shadow: 3px 3px 6px orange;
-}  
+}
 
 .search-sort-container {
   display: flex;
@@ -195,14 +195,19 @@ export default {
   color: #888;
   margin-bottom: 15px;
 }
+
 .button-group {
   display: flex;
-  justify-content: space-between; /* 使按鈕兩邊對齊，並分開 */
-  
+  justify-content: space-between;
+  /* 使按鈕兩邊對齊，並分開 */
+
 }
+
 .button-group button {
-  flex: 1; /* 按鈕寬度填滿父容器的寬度 */
-  margin: 0 450px; /* 在按鈕左右增加間距 */
+  flex: 1;
+  /* 按鈕寬度填滿父容器的寬度 */
+  margin: 0 450px;
+  /* 在按鈕左右增加間距 */
   text-align: center;
   padding: 4px 20px;
   padding-bottom: 5px;
@@ -210,7 +215,7 @@ export default {
   cursor: pointer;
   font-weight: 800;
   border-radius: 4px;
-  background-color:#f06292;
+  background-color: #f06292;
   height: 40px;
   color: white;
   margin-top: 50px;

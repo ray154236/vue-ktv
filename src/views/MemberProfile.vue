@@ -21,7 +21,8 @@
       <label>會員名稱:</label>
       <input v-model="editedMember.memberName" type="text" placeholder="請輸入會員名稱">
       <label>電話:</label>
-      <input v-model="editedMember.phone" type="text" placeholder="請輸入電話">
+      <input v-model="editedMember.phone" type="text" placeholder="請輸入電話" @input="validatePhone" maxlength="10"
+        pattern="\d{10}" title="電話號碼必須是10位數字" />
       <label>生日:</label>
       <input v-model="editedMember.birth" type="date">
       <label>Email:</label>
@@ -82,6 +83,11 @@ export default {
       };
     },
     saveChanges() {
+      // 驗證電話號碼長度
+      if (this.editedMember.phone.length !== 10) {
+        alert('電話號碼必須是10位數字');
+        return;
+      }
       // 呼叫 Vuex 的 action 並確保返回一個 Promise
       this.$store.dispatch('updateMemberInfo', this.editedMember)
         .then(() => {
@@ -110,6 +116,13 @@ export default {
     },
     goBack() {
       this.$router.go(-1); // 返回上一頁
+    },
+    validatePhone(event) {
+      const input = event.target;
+      const value = input.value;
+      // 只允許輸入數字，並且強制長度為10
+      input.value = value.replace(/\D/g, '').slice(0, 10);
+      this.editedMember.phone = input.value;
     }
   }
 };

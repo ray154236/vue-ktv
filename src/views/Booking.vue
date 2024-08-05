@@ -327,6 +327,8 @@ export default {
   /* 柔和的陰影效果 */
   backdrop-filter: blur(0px);
   /* 背景模糊效果 */
+  font-size: 22px;
+  font-weight: 800;
 }
 
 /* 動畫效果 */

@@ -1,4 +1,3 @@
-<!-- src/views/Register.vue -->
 <template>
   <div class="login">
     <div class="login-form">
@@ -73,6 +72,22 @@ export default {
         return;
       }
 
+      // 檢查電話號碼長度是否為10
+      if (this.phone.length !== 10 || !/^\d{10}$/.test(this.phone)) {
+        this.message = '電話號碼必須為 10 個數字。';
+        return;
+      }
+
+      // 檢查密碼長度和內容
+      if (this.password.length < 6 || this.password.length > 15) {
+        this.message = '密碼長度必須在 6 到 15 個字元之間。';
+        return;
+      }
+      if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(this.password)) {
+        this.message = '密碼必須包含至少一個英文字母和一個數字。';
+        return;
+      }
+
       try {
         const response = await fetch('/ktv-app/api/register', {
           method: 'POST',
@@ -100,7 +115,7 @@ export default {
         }
       } catch (error) {
         console.error('Error:', error);
-        this.message = 'An error occurred during registration.';
+        this.message = '註冊過程中發生錯誤。';
       }
     }
   }
@@ -134,7 +149,7 @@ export default {
   /* 文字置中 */
 }
 
-.login-form h1 {
+.login-form h5 {
   margin-bottom: 20px;
   /* 標題底部間距 */
   font-size: 24px;
