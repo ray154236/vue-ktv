@@ -130,11 +130,11 @@ export default {
             active: index === 0
           }));
       } else {
-        console.error('响应数据为空或格式不正确:', response.data);
+        console.error('響應數據或格式不為空:', response.data);
       }
     })
     .catch(error => {
-      console.error('数据获取失败:', error);
+      console.error('數據獲取失敗:', error);
     });
 },
     startCarousel() {
@@ -171,7 +171,7 @@ export default {
   },
   watch: {
     activeIndex(newIndex) {
-      // 監聽 activeIndex 的變化，更新小圖的激活狀態
+      // 監聽 activeIndex 的變化，更新小圖的狀態
       this.activeSlides.forEach((slide, index) => {
         slide.active = index === newIndex;
       });
