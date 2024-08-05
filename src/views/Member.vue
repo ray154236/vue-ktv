@@ -1,5 +1,5 @@
 <template>
-   <h5 class="room-title">會員基本資料</h5>
+  <h5 class="room-title">會員基本資料</h5>
   <div class="member-container">
     <!-- 會員頭像和基本資料 -->
     <div class="member-profile">
@@ -23,6 +23,7 @@
     <!-- 右側：功能按鈕 -->
     <div class="member-actions">
       <button @click="goToProfile">修改基本資料</button>
+      <button @click="goToChangePassword">更改密碼</button>
       <button @click="goToReservation">立即訂位</button>
       <button @click="goToReservationQuery">訂位查詢</button>
     </div>
@@ -57,6 +58,10 @@ function formatDate(dateString) {
 
 function goToProfile() {
   router.push('/member-profile');
+}
+
+function goToChangePassword() {
+  router.push('/change-password');
 }
 
 function goToReservation() {
@@ -158,7 +163,8 @@ onMounted(async () => {
 
 .member-profile {
   display: flex;
-  flex-direction: column; /* 改變排列方向為縱向 */
+  flex-direction: column;
+  /* 改變排列方向為縱向 */
   align-items: center;
   flex: 1;
   border-radius: 8px;
@@ -200,13 +206,15 @@ onMounted(async () => {
   font-weight: 800;
   color: #ffffff;
 }
+
 .member-actions {
- margin-top: 20px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   flex-basis: 200px;
 }
+
 .member-actions button {
   margin-bottom: 15px;
   padding: 12px 24px;
@@ -231,6 +239,7 @@ onMounted(async () => {
 .member-actions button:focus {
   outline: none;
 }
+
 .room-title {
   margin-top: 40px;
   text-align: center;
