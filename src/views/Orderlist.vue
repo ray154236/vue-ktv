@@ -35,7 +35,7 @@
           <td>{{ order.hours }}</td>
           <td>
             <span v-if="order.status == '取消預約'" class="cancelled-text">已取消</span>
-            <button v-if="order.status != '取消預約'" class="cancel-button" @click="confirmCancelOrder(order.orderId)">取消訂單</button>
+            <button v-if="order.status != '取消預約' && order.status != '消費中' && order.status != '已結帳'" class="cancel-button" @click="confirmCancelOrder(order.orderId)">取消訂單</button>
           </td>
         </tr>
       </tbody>
