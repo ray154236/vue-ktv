@@ -72,30 +72,29 @@ export default {
       return new Date(date).toLocaleDateString('zh-TW');
     },
     fetchNews() {
-      axios.get('http://localhost:8080/ktv-app/news/news')
-        .then(response => {
-          console.log('原始數據:', response.data);
-          this.newsList = response.data.filter(news => news.status === 'active').map(news => {
-            return {
-              ...news,
-              url: news.url ? news.url : '#',
-            };
-          });
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: 'error',
-            title: '錯誤',
-            text: error.message,
-          });
-        });
-    },
+  axios.get('/ktv-app/news/news')
+    .then(response => {
+      this.newsList = response.data.list.filter(news => news.status === 'active').map(news => {
+        return {
+          ...news,
+          url: news.url ? news.url : '#',
+        };
+      });
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: '錯誤',
+        text: '無法獲取新聞資料，請稍後再試。',
+      });
+    });
+},
     newsShow(newsId) {
       this.$router.push({ name: 'NewsShow', params: { newsId: newsId } });
     },
     searchByTitle() {
       if (this.searchKeyword.trim() !== '') {
-        axios.get(`http://localhost:8080/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
+        axios.get(`/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
           .then(response => {
             this.newsList = response.data.filter(news => news.status === 'active').map(news => {
               return {
@@ -108,7 +107,7 @@ export default {
             Swal.fire({
               icon: 'error',
               title: '搜尋錯誤',
-              text: error.message,
+              text: '標題搜尋失敗，請稍後再試。',
             });
           });
       } else {
@@ -138,7 +137,7 @@ export default {
   font-weight: bold;
   background: none;
   text-shadow: 3px 3px 6px orange;
-}
+}  
 
 .search-sort-container {
   display: flex;
@@ -195,7 +194,6 @@ export default {
   color: #888;
   margin-bottom: 15px;
 }
-
 .button-group {
   display: flex;
   justify-content: space-around; /* 按钮均匀分布 */
