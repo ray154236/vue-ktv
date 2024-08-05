@@ -1,4 +1,5 @@
 <template>
+    <div class="fade-in">
   <!-- 大圖輪播區域 -->
   <div class="carousel-inner">
     <div v-for="(slide, index) in activeSlides" :key="index" :class="['carousel-item', { active: index === activeIndex }]">
@@ -24,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="song in pagedSongs" :key="song.title">
+        <tr v-for="song in pagedSongs" :key="song.id" @click="openVideo(song.videoUrl)" class="clickable-row">
           <td>{{ song.id }}</td>
           <td>{{ song.title }}</td>
           <td>{{ song.artist }}</td>
@@ -42,6 +43,9 @@
     </div>
     </div>
   </div>
+      <!-- 跳轉到頂部 -->
+      <button class="scroll-to-top" @click="scrollToTop">▲</button>
+</div>
 </template>
 
 <script>
@@ -55,36 +59,36 @@ export default {
       activeIndex: 0,    // 初始化為第一個輪播項目的索引
       intervalId: null, // 存儲定時器 ID，用於控制自動輪播
       songs:[
-  { id: 1, title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', lastWeekRank: "1 -" },
-  { id: 2, title: '擱淺', artist: '周杰倫', lastWeekRank: "3 ↑" },
-  { id: 3, title: '妥協', artist: '蔡依林', lastWeekRank: "4 ↑" },
-  { id: 4, title: '字字句句', artist: '盧盧快閉嘴', lastWeekRank: "5 ↓" },
-  { id: 5, title: '星期五晚上', artist: 'Energy', lastWeekRank: "2 ↓" },
-  { id: 6, title: '毒藥', artist: '蕭秉治', lastWeekRank: "10 ↑" },
-  { id: 7, title: '天后', artist: '陳勢安', lastWeekRank: "6 ↓" },
-  { id: 8, title: '倒帶', artist: '蔡依林', lastWeekRank: "9 ↑" },
-  { id: 9, title: '如果可以', artist: '韋禮安', lastWeekRank: "14 ↑" },
-  { id: 10, title: '訣愛', artist: 'Faye 詹雯婷', lastWeekRank: "8 ↓" },
-  { id: 11, title: '嘉賓', artist: '張遠', lastWeekRank: "11 -" },
-  { id: 12, title: '慢冷', artist: '梁靜茹', lastWeekRank: "15 ↑" },
-  { id: 13, title: '從前說', artist: '小阿七', lastWeekRank: "12 ↓" },
-  { id: 14, title: '我很好騙', artist: '動力火車', lastWeekRank: "16 ↑" },
-  { id: 15, title: '離開的一路上', artist: '理想混蛋', lastWeekRank: "13 ↓" },
-  { id: 16, title: '想和你看五月的晚霞', artist: '陳華 Hua Chen', lastWeekRank: "18 ↑" },
-  { id: 17, title: '我會等', artist: '承桓', lastWeekRank: "17 -" },
-  { id: 18, title: '家家酒', artist: '家家', lastWeekRank: "20 ↑" },
-  { id: 19, title: '痴心絕對', artist: '李聖傑', lastWeekRank: "21 ↑" },
-  { id: 20, title: '我懷念的', artist: '孫燕姿', lastWeekRank: "19 ↓" },
-  { id: 21, title: '摯友', artist: 'A-Lin', lastWeekRank: "23 ↑" },
-  { id: 22, title: '十年', artist: '陳奕迅', lastWeekRank: "28 ↑" },
-  { id: 23, title: '專屬天使', artist: 'TANK', lastWeekRank: "22 ↓" },
-  { id: 24, title: '雨愛', artist: '楊丞琳', lastWeekRank: "25 ↓" },
-  { id: 25, title: '體面', artist: '于文文', lastWeekRank: "27 ↑" },
-  { id: 26, title: 'Without You', artist: '高爾宣OSN', lastWeekRank: "26 -" },
-  { id: 27, title: '總會有人', artist: '向思思', lastWeekRank: "24 ↓" },
-  { id: 28, title: '孤勇者', artist: '陳奕迅', lastWeekRank: "33 ↑" },
-  { id: 29, title: '修煉愛情', artist: '林俊傑', lastWeekRank: "29 -" },
-  { id: 30, title: '給我一個理由忘記', artist: 'A-Lin', lastWeekRank: "25 ↓" }
+  { id: 1, title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', lastWeekRank: "1 -",videoUrl: 'https://www.youtube.com/watch?v=wlSvIL-H1GQ'},
+  { id: 2, title: '擱淺', artist: '周杰倫', lastWeekRank: "3 ↑",videoUrl: 'https://www.youtube.com/watch?v=YJfHuATJYsQ' },
+  { id: 3, title: '妥協', artist: '蔡依林', lastWeekRank: "4 ↑",videoUrl: 'https://www.youtube.com/watch?v=M00rcJ9gMEc'},
+  { id: 4, title: '字字句句', artist: '盧盧快閉嘴', lastWeekRank: "5 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=N9XgnvGaZxk'},
+  { id: 5, title: '星期五晚上', artist: 'Energy', lastWeekRank: "2 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=btPv0-d3NbE'},
+  { id: 6, title: '毒藥', artist: '蕭秉治', lastWeekRank: "10 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=rgTQYCo0WCM'},
+  { id: 7, title: '天后', artist: '陳勢安', lastWeekRank: "6 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=cRVDT_MdLpY&list=OLAK5uy_nuRKdzR0hA1I687dRAN4HUeJz9iQ3Xp24'},
+  { id: 8, title: '倒帶', artist: '蔡依林', lastWeekRank: "9 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=cB7DIIG0ykk'},
+  { id: 9, title: '如果可以', artist: '韋禮安', lastWeekRank: "14 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=8MG--WuNW1Y'},
+  { id: 10, title: '訣愛', artist: 'Faye 詹雯婷', lastWeekRank: "8 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=ivqVNORpylY'},
+  { id: 11, title: '嘉賓', artist: '張遠', lastWeekRank: "11 -" ,videoUrl: 'https://www.youtube.com/watch?v=8ux25IcLr8w'},
+  { id: 12, title: '慢冷', artist: '梁靜茹', lastWeekRank: "15 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=TpF0wNlopp8'},
+  { id: 13, title: '從前說', artist: '小阿七', lastWeekRank: "12 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=hEMRM6J7LlY'},
+  { id: 14, title: '我很好騙', artist: '動力火車', lastWeekRank: "16 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=3HsIaWuNeX0'},
+  { id: 15, title: '離開的一路上', artist: '理想混蛋', lastWeekRank: "13 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=3hLESh77fSg'},
+  { id: 16, title: '想和你看五月的晚霞', artist: '陳華 Hua Chen', lastWeekRank: "18 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=ljd9ISixsWo'},
+  { id: 17, title: '我會等', artist: '承桓', lastWeekRank: "17 -" ,videoUrl: 'https://www.youtube.com/watch?v=yaNPy3xKw1M'},
+  { id: 18, title: '家家酒', artist: '家家', lastWeekRank: "20 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=T-Xk_xirUlo'},
+  { id: 19, title: '痴心絕對', artist: '李聖傑', lastWeekRank: "21 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=7NIsBeVRAgk'},
+  { id: 20, title: '我懷念的', artist: '孫燕姿', lastWeekRank: "19 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=3Xj6QoLmoF0'},
+  { id: 21, title: '摯友', artist: 'A-Lin', lastWeekRank: "23 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=vGqpGFH3vh8'},
+  { id: 22, title: '十年', artist: '陳奕迅', lastWeekRank: "28 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=JM9rx_hN1Ko'},
+  { id: 23, title: '專屬天使', artist: 'TANK', lastWeekRank: "22 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=QdWRuFQZ8RI'},
+  { id: 24, title: '雨愛', artist: '楊丞琳', lastWeekRank: "25 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=oec9R5ypf-o'},
+  { id: 25, title: '體面', artist: '于文文', lastWeekRank: "27 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=-kfVp3tqYvc'},
+  { id: 26, title: 'Without You', artist: '高爾宣OSN', lastWeekRank: "26 -" ,videoUrl: 'https://www.youtube.com/watch?v=HQDDlgGy2hg'},
+  { id: 27, title: '總會有人', artist: '向思思', lastWeekRank: "24 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=BdhZWffz0ZM'},
+  { id: 28, title: '孤勇者', artist: '陳奕迅', lastWeekRank: "33 ↑" ,videoUrl: 'https://www.youtube.com/watch?v=Hlp8XD0R5qo'},
+  { id: 29, title: '修煉愛情', artist: '林俊傑', lastWeekRank: "29 -" ,videoUrl: 'https://www.youtube.com/watch?v=LWV-f6dMN3Q'},
+  { id: 30, title: '給我一個理由忘記', artist: 'A-Lin', lastWeekRank: "25 ↓" ,videoUrl: 'https://www.youtube.com/watch?v=F5FlN-NBGo8'}
 ],
       currentPage: 1,   // 當前頁碼
       pageSize: 10       // 每頁顯示的項目數量
@@ -105,6 +109,11 @@ export default {
   },
   mounted() {
     this.startCarousel();  // 在組件掛載後開始自動輪播
+
+    this.$nextTick(() => {
+    // 确保 DOM 元素已经渲染
+    document.querySelector('.fade-in').classList.add('fade-in');
+  });
   },
   beforeDestroy() {
     clearInterval(this.intervalId);  // 在組件銷毀前清除定時器，避免內存洩漏
@@ -131,6 +140,18 @@ export default {
       console.error('數據獲取失敗:', error);
     });
 },
+scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // 平滑滚动
+      });
+    },
+    scrollToBottom() {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth' // 平滑滚动
+      });
+    },
     startCarousel() {
       // 使用定時器每隔一段時間（這裡是4秒）切換到下一張大圖
       this.intervalId = setInterval(() => {
@@ -161,7 +182,10 @@ export default {
     goToPage(page) {
       if (page < 1 || page > this.totalPages) return;  // 檢查頁碼是否合法
       this.currentPage = page;
-    }
+    },
+    openVideo(videoUrl) {
+    window.open(videoUrl, '_blank'); // 在新分頁打開影片
+  },
   },
   watch: {
     activeIndex(newIndex) {
@@ -172,9 +196,27 @@ export default {
     }
   }
 };
+
 </script>
 
 <style>
+
+/* 定义开场动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 应用动画 */
+.fade-in {
+  animation: fadeIn 2s ease-in-out;
+}
+
+
 .carousel-inner {
   margin-top: 5px;
 }
@@ -310,5 +352,34 @@ button:disabled {
   background-color: #d0d0d0; /* 禁用狀態下的背景色 */
   cursor: not-allowed; /* 禁用狀態下顯示不可點擊光標 */
 }
+.scroll-to-top,
+.scroll-to-bottom {
+  position: fixed;
+  right: 20px;
+  width: 50px; /* 確保寬度和高度相等 */
+  height: 50px;
+  border: none;
+  border-radius: 50%; /* 圓形按鈕 */
+  background-color: #011c3a;
+  color: white;
+  display: flex;
+  align-items: center; /* 垂直居中對齊文本 */
+  justify-content: center; /* 水平居中對齊文本 */
+  cursor: pointer;
+  z-index: 1000; /* 確保按鈕在上層 */
+  font-size: 16px; /* 設置字體大小 */
+}
 
+.scroll-to-bottom {
+  bottom: 20px; /* 距離底部 20px */
+}
+
+.scroll-to-top {
+  bottom: 80px; /* 距離底部 80px，確保與底部按鈕不重疊 */
+}
+
+.scroll-to-top:hover,
+.scroll-to-bottom:hover {
+  background-color: #0056b3; /* 懸停時的背景顏色 */
+}
 </style>
