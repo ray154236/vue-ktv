@@ -28,7 +28,7 @@
     photoUrl.value = '';
     fetchStatus.value = '';
   
-    axios.get(`http://localhost:8080/ktv-app/photos/findImage/${photoId.value}`, {
+    axios.get(`/photos/findImage/${photoId.value}`, {
       responseType: 'blob' // 確保接收的數據是二進位形式
     })
     .then(function(response) {

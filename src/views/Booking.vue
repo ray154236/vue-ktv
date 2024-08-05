@@ -232,17 +232,17 @@ export default {
         createTime: new Date().toISOString(),
         startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
       };
-
+      console.log("orderData", orderData)
       // 发起第一次请求
-      axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
+      axios.post('/ktv-app/roomCheck', orderData)
         .then(response => {
           console.log('roomCheck response:', response);
 
           if (response.data.success) {
             // 如果第一次请求成功，发起第二次请求
-            return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
+            return axios.post('/ktv-app/ktvbackend/orders/testNewOrder', orderData);
           } else {
-            // 如果第一次请求失败，显示提示框
+            // 如果第一次請求失敗，顯示提示框
             return Swal.fire({
               icon: 'question',
               text: response.data.message,
@@ -254,17 +254,19 @@ export default {
                 // 用户确认后发起第二次请求
                 return axios.post('/ktv-app/ktvbackend/orders/testNewOrder', orderData);
               } else {
-                // 用户取消了操作，关闭弹窗
+                // 使用者取消了操作，關閉彈窗
                 Swal.close();
-                // 返回一个空 Promise，以确保链式调用不会继续
+                // 返回一個空的 Promise，以確保鏈式調用不會繼續
                 return Promise.resolve();
               }
             });
           }
+        }).catch(function (error) {
+          console.log("newOrderError = ", error.message)
         })
         .then(response => {
           if (response && response.data && response.data.success) {
-            // 如果第二次请求成功，显示成功提示并跳转
+            // 如果第二次請求成功，顯示成功提示並跳轉
             return Swal.fire({
               icon: 'success',
               title: '訂位成功',
@@ -275,7 +277,7 @@ export default {
           }
         })
         .catch(error => {
-          // 捕捉并处理任何错误
+          // 捕捉並處理任何錯誤
           console.error('Error occurred:', error);
 
           Swal.fire({

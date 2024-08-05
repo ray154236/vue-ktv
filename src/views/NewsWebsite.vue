@@ -18,7 +18,7 @@
 
     <div class="news-grid">
       <div v-for="news in filteredNews" :key="news.newsId" class="news-item" @click="newsShow(news.newsId)">
-        <img :src="`http://localhost:8080/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
         <div class="news-details">
           <p class="news-date">{{ formatDate(news.activityStartDate) }} 至 {{ formatDate(news.endDate) }}</p>
           <h3 class="news-title">{{ news.title }}</h3>
@@ -72,9 +72,10 @@ export default {
       return new Date(date).toLocaleDateString('zh-TW');
     },
     fetchNews() {
-  axios.get('http://localhost:8080/ktv-app/news/news')
+  axios.get('/ktv-app/news/news')
     .then(response => {
-      this.newsList = response.data.list.filter(news => news.status === 'active').map(news => {
+      console.log('原始數據:', response.data);
+      this.newsList = response.data.filter(news => news.status === 'active').map(news => {
         return {
           ...news,
           url: news.url ? news.url : '#',
@@ -85,7 +86,7 @@ export default {
       Swal.fire({
         icon: 'error',
         title: '錯誤',
-        text: '無法獲取新聞資料，請稍後再試。',
+        text: error.message,
       });
     });
 },
@@ -94,7 +95,7 @@ export default {
     },
     searchByTitle() {
       if (this.searchKeyword.trim() !== '') {
-        axios.get(`http://localhost:8080/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
+        axios.get(`/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
           .then(response => {
             this.newsList = response.data.filter(news => news.status === 'active').map(news => {
               return {
@@ -107,7 +108,7 @@ export default {
             Swal.fire({
               icon: 'error',
               title: '搜尋錯誤',
-              text: '標題搜尋失敗，請稍後再試。',
+              text: error.message,
             });
           });
       } else {

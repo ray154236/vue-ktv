@@ -71,7 +71,7 @@ async function orderList() {
   };
 
   try {
-    const response = await axios.post("http://localhost:8080/ktv-app/ktvbackend/orders/find", request);
+    const response = await axios.post("/ktvbackend/orders/find", request);
     orders.value = response.data.list;
   } catch (error) {
     Swal.fire({

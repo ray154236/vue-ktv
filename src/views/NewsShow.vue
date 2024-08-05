@@ -6,7 +6,7 @@
 
       <!-- 新聞圖片 -->
       <div class="news-image">
-        <img :src="`http://localhost:8080/ktv-app/news/news/image/${newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`/ktv-app/news/news/image/${newsId}`" class="news-image" alt="新聞圖片">
       </div>
 
       <!-- 新聞內容 -->
@@ -27,7 +27,10 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import moment from 'moment';
+
+
 
 export default {
   props: ['newsId'],
@@ -50,27 +53,27 @@ export default {
   },
   methods: {
     fetchNewsDetails() {
-  axios.get(`http://localhost:8080/ktv-app/news/find/${this.newsId}`)
-    .then(response => {
-      const news = response.data.news; 
-      console.log('獲取到的新聞數據:', news); // 調試數據
+      axios.get(`/ktv-app/news/news/find/${this.newsId}`)
+        .then(response => {
+          const news = response.data || {};
+          console.log('獲取到的新聞數據:', news); // 調試數據
 
-      this.news = {
-        ...news,
-        activityStartDate: this.formatDate(news.activityStartDate),
-        endDate: this.formatDate(news.endDate),
-        imageUrl: news.image ? `data:image/jpeg;base64,${news.image}` : null
-      };
-    })
-    .catch(error => {
-      console.error('獲取新聞詳情時發生錯誤:', error);
-      Swal.fire({
-        icon: 'error',
-        title: '錯誤',
-        text: '無法獲取新聞資料，請稍後再試。',
-      });
-    });
-},
+          this.news = {
+            ...news,
+            activityStartDate: this.formatDate(news.activityStartDate),
+            endDate: this.formatDate(news.endDate),
+            imageUrl: news.image ? `data:image/jpeg;base64,${news.image}` : null
+          };
+        })
+        .catch(error => {
+          console.error('獲取新聞詳情時發生錯誤:', error);
+          Swal.fire({
+            icon: 'error',
+            title: '錯誤',
+            text: '無法獲取新聞資料，請稍後再試 - newShow。',
+          });
+        });
+    },
     formatDate(dateString) {
       return moment(dateString).format('YYYY-MM-DD');
     },
@@ -217,11 +220,11 @@ export default {
     opacity: 1;
   }
   mid {
-  text-align: center; /* 将输入框中的文本居中 */
-  border: 1px solid #ddd; /* 可选: 设置边框 */
-  border-radius: 5px; /* 可选: 设置圆角边框 */
-  padding: 5px; /* 可选: 设置内边距 */
-  width: 100%; /* 确保输入框宽度填满容器 */
+  text-align: center; /* 將輸入框中的文本置中 */
+  border: 1px solid #ddd; /* 可選: 設置邊框 */
+  border-radius: 5px; /* 可選: 設置圓角邊框 */
+  padding: 5px; /* 可選: 設置內邊距 */
+  width: 100%; /* 確保輸入框寬度填滿容器 */
 }
 }
 </style>
