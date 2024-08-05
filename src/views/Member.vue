@@ -1,5 +1,5 @@
 <template>
-  <h5 class="room-title">會員基本資料</h5>
+   <h5 class="room-title">會員基本資料</h5>
   <div class="member-container">
     <!-- 會員頭像和基本資料 -->
     <div class="member-profile">
@@ -10,7 +10,7 @@
       <div class="profile-info">
         <div v-if="member" class="info-list">
           <p><strong>會員編號:</strong> {{ member.memberId }}</p>
-          <p><strong>身分證字號:</strong> {{ maskedIdNumber }}</p>
+          <p><strong>身分證字號:</strong> {{ member.idNumber }}</p>
           <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
           <p><strong>電話:</strong> {{ member.phone }}</p>
           <p><strong>生日:</strong> {{ formatDate(member.birth) }}</p>
@@ -23,13 +23,11 @@
     <!-- 右側：功能按鈕 -->
     <div class="member-actions">
       <button @click="goToProfile">修改基本資料</button>
-      <button @click="goToChangePassword">變更密碼</button>
       <button @click="goToReservation">立即訂位</button>
       <button @click="goToReservationQuery">訂位查詢</button>
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
@@ -42,14 +40,6 @@ const fileInput = ref(null);
 const profilePicture = ref('/src/assets/member.jpg'); // 預設圖片
 
 const member = computed(() => store.getters.member);
-
-const maskedIdNumber = computed(() => {
-  if (member.value && member.value.idNumber) {
-    const idNumber = member.value.idNumber;
-    return idNumber.slice(0, -4) + '****'; // 顯示前面部分加上****
-  }
-  return '';
-});
 
 onMounted(() => {
   if (!member.value) { // 檢查是否存在會員資料
@@ -67,10 +57,6 @@ function formatDate(dateString) {
 
 function goToProfile() {
   router.push('/member-profile');
-}
-
-function goToChangePassword() {
-  router.push('/change-password');
 }
 
 function goToReservation() {
@@ -158,7 +144,6 @@ onMounted(async () => {
 
 </script>
 
-
 <style scoped>
 .member-container {
   display: flex;
@@ -173,8 +158,7 @@ onMounted(async () => {
 
 .member-profile {
   display: flex;
-  flex-direction: column;
-  /* 改變排列方向為縱向 */
+  flex-direction: column; /* 改變排列方向為縱向 */
   align-items: center;
   flex: 1;
   border-radius: 8px;
@@ -216,18 +200,16 @@ onMounted(async () => {
   font-weight: 800;
   color: #ffffff;
 }
-
 .member-actions {
-  margin-top: 20px;
+ margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   flex-basis: 200px;
 }
-
 .member-actions button {
-  margin-bottom: 20px;
-  padding: 24px 24px;
+  margin-bottom: 15px;
+  padding: 12px 24px;
   font-size: 22px;
   cursor: pointer;
   border: none;
@@ -236,8 +218,6 @@ onMounted(async () => {
   background-color: #ff85b3;
   font-weight: 800;
   transition: background-color 0.3s, transform 0.2s;
-  width: 200px;
-  /* 統一按鈕寬度 */
 }
 
 .member-actions button:hover {
@@ -251,7 +231,6 @@ onMounted(async () => {
 .member-actions button:focus {
   outline: none;
 }
-
 .room-title {
   margin-top: 40px;
   text-align: center;
