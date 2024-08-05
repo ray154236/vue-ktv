@@ -118,7 +118,7 @@ function confirmCancelOrder(orderId) {
 
 async function cancelOrder(orderId) {
   try {
-    const response = await axios.post("/ktv-app/ktvbackend/orders/noCheckIn/" + orderId, {});
+    const response = await axios.post("/ktvbackend/orders/noCheckIn/" + orderId, {});
     if (response.data.success) {
       Swal.fire({
         icon: "success",

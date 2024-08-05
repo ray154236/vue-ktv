@@ -10,7 +10,7 @@
       <div class="profile-info">
         <div v-if="member" class="info-list">
           <p><strong>會員編號:</strong> {{ member.memberId }}</p>
-          <p><strong>身分證字號:</strong> {{ member.idNumber }}</p>
+          <p><strong>身分證字號:</strong> {{ maskedIdNumber }}</p>
           <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
           <p><strong>電話:</strong> {{ member.phone }}</p>
           <p><strong>生日:</strong> {{ formatDate(member.birth) }}</p>
@@ -41,6 +41,14 @@ const fileInput = ref(null);
 const profilePicture = ref('/src/assets/member.jpg'); // 預設圖片
 
 const member = computed(() => store.getters.member);
+
+const maskedIdNumber = computed(() => {
+  if (member.value && member.value.idNumber) {
+    const idNumber = member.value.idNumber;
+    return idNumber.slice(0, -4) + '****'; // 顯示前面部分加上****
+  }
+  return '';
+});
 
 onMounted(() => {
   if (!member.value) { // 檢查是否存在會員資料
@@ -148,7 +156,6 @@ onMounted(async () => {
 });
 
 </script>
-
 <style scoped>
 .member-container {
   display: flex;
@@ -211,14 +218,18 @@ onMounted(async () => {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  /* 居中對齊按鈕 */
   flex-basis: 200px;
 }
 
 .member-actions button {
   margin-bottom: 15px;
+  /* 按鈕之間的間距 */
   padding: 12px 24px;
-  font-size: 22px;
+  /* 內邊距統一 */
+  font-size: 16px;
+  /* 統一字體大小 */
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -226,6 +237,8 @@ onMounted(async () => {
   background-color: #ff85b3;
   font-weight: 800;
   transition: background-color 0.3s, transform 0.2s;
+  width: 200px;
+  /* 統一按鈕寬度 */
 }
 
 .member-actions button:hover {
