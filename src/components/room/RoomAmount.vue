@@ -7,7 +7,8 @@
             <th>包廂尺寸</th>
             <th>坪數</th>
             <th>人數建議</th>
-            <th>金額</th>
+            <th>金額(3小時)</th>
+            <th>加時</th>
           </tr>
         </thead>
         <tbody>
@@ -16,18 +17,21 @@
             <td>6坪</td>
             <td>2-6人</td>
             <td>$5000</td>
+            <td>$1000/小時</td>
           </tr>
           <tr>
             <td>舒適中包廂</td>
             <td>9坪</td>
             <td>6-10人</td>
             <td>$8000</td>
+            <td>$1500/小時</td>
           </tr>
           <tr>
             <td>豪華大包廂</td>
             <td>15坪</td>
             <td>11-20人</td>
             <td>$10000</td>
+            <td>$2000/小時</td>
           </tr>
         </tbody>
       </table>

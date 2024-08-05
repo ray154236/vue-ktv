@@ -117,29 +117,26 @@ export default {
   },
   methods: {
     fetchSlides() {
-      // 通過 axios 發送 HTTP GET 請求，獲取輪播項目數據
-      axios.get('http://localhost:8080/ktv-app/news/news')
-        .then(response => {
-          if (response.data && Array.isArray(response.data)) {
-            this.activeSlides = response.data
-              .filter(news => news.status === 'active')
-              .map((news, index) => {
-                return {
-                  image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
-                  smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
-                  altText: `Slide ${index + 1}`,
-                  newsId: news.newsId,
-                  active: index === 0  // 第一個項目默認為激活狀態
-                };
-              });
-          } else {
-            console.error('響應數據為空或不是數組:', response.data);
-          }
-        })
-        .catch(error => {
-          console.error('數據獲取失敗:', error); // 錯誤處理，捕獲並打印錯誤信息
-        });
-    },
+  axios.get('http://localhost:8080/ktv-app/news/news')
+    .then(response => {
+      if (response.data && Array.isArray(response.data.list)) {
+        this.activeSlides = response.data.list
+          .filter(news => news.status === 'active')
+          .map((news, index) => ({
+            image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
+            smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
+            altText: `Slide ${index + 1}`,
+            newsId: news.newsId,
+            active: index === 0
+          }));
+      } else {
+        console.error('响应数据为空或格式不正确:', response.data);
+      }
+    })
+    .catch(error => {
+      console.error('数据获取失败:', error);
+    });
+},
     startCarousel() {
       // 使用定時器每隔一段時間（這裡是4秒）切換到下一張大圖
       this.intervalId = setInterval(() => {
