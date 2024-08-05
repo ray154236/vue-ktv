@@ -47,9 +47,9 @@
                 <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
                 =======
                 <button @click="goToPage(1)" :disabled="currentPage === 1">
-                  <<< /button>
+                  << </button>
                     <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-                      << /button>
+                      < </button>
                         <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
                         <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
                         >>>>>>> 83724b6bceee6e88b74c263cefe780959acc876d
