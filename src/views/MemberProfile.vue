@@ -69,7 +69,7 @@ export default {
   created() {
     // 檢查是否登入，如果沒有則重定向到登入頁面
     if (!this.member) {
-      this.$router.push('/api/login');
+      this.$router.push('/login');
     }
   },
   methods: {
