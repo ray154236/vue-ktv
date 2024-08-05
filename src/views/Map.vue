@@ -61,7 +61,7 @@ export default {
       phone: '(02) 6631-6588',
       address: '106台北市大安區復興南路一段390號2樓',
       hours: '24小時營業',
-      room: '小型包廂(5人)、中型包廂(10人)、大型包廂(20人)',
+      room: '小型包廂(6人)、中型包廂(10人)、大型包廂(20人)',
       transportInfo: '靠近大安捷運站，方便搭乘公共交通。',
       mapSrc: 'https://www.google.com/maps/d/embed?mid=1xwDlUfH08eh1ya9atxxvSQZKepcEiSg&hl=zh-TW&ehbc=2E312F" width="640" height="480',
       imageSrc: '', // 替換圖片 URL
