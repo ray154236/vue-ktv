@@ -40,11 +40,11 @@
     <div class="changepage">
       <div class="pagination">
         <button @click="goToPage(1)" :disabled="currentPage === 1">
-        </button>
-        <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-        </button>
-        <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
-        <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
+          << </button>
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+              < </button>
+                <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
+                <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
       </div>
     </div>
   </div>
@@ -117,26 +117,26 @@ export default {
   },
   methods: {
     fetchSlides() {
-  axios.get('http://localhost:8080/ktv-app/news/news')
-    .then(response => {
-      if (response.data && Array.isArray(response.data.list)) {
-        this.activeSlides = response.data.list
-          .filter(news => news.status === 'active')
-          .map((news, index) => ({
-            image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
-            smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
-            altText: `Slide ${index + 1}`,
-            newsId: news.newsId,
-            active: index === 0
-          }));
-      } else {
-        console.error('响应数据为空或格式不正确:', response.data);
-      }
-    })
-    .catch(error => {
-      console.error('数据获取失败:', error);
-    });
-},
+      axios.get('http://localhost:8080/ktv-app/news/news')
+        .then(response => {
+          if (response.data && Array.isArray(response.data.list)) {
+            this.activeSlides = response.data.list
+              .filter(news => news.status === 'active')
+              .map((news, index) => ({
+                image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
+                smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
+                altText: `Slide ${index + 1}`,
+                newsId: news.newsId,
+                active: index === 0
+              }));
+          } else {
+            console.error('响应数据为空或格式不正确:', response.data);
+          }
+        })
+        .catch(error => {
+          console.error('数据获取失败:', error);
+        });
+    },
     startCarousel() {
       // 使用定時器每隔一段時間（這裡是4秒）切換到下一張大圖
       this.intervalId = setInterval(() => {

@@ -4,7 +4,8 @@
       <a class="navbar-brand" href="/">
         <img src="/src/assets/GOLD-PANDA.png" alt="Logo" class="logo">
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -24,14 +25,15 @@
           <li class="nav-item">
             <a class="nav-link" href="/booking">線上訂位</a>
           </li>
-          <li class="nav-item" v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room' || $route.path === '/orderlist')">
+          <li class="nav-item"
+            v-if="isLoggedIn && ($route.path === '/' || $route.path === '/member' || $route.path === '/map' || $route.path === '/newswebsite' || $route.path === '/member-profile' || $route.path === '/booking' || $route.path === '/room' || $route.path === '/orderlist' || $route.path === '/change-password')">
             <a class="nav-link" href="#" @click="handleLogout">登出</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  
+
 </template>
 
 <script>
@@ -72,8 +74,10 @@ export default {
   margin-top: 8px;
   margin-bottom: 10px;
   height: 80px;
-  width: auto; /* 使 Logo 寬度適應導航列 */
-  max-height: 100%; /* 確保 Logo 不超過導航列的高度 */
+  width: auto;
+  /* 使 Logo 寬度適應導航列 */
+  max-height: 100%;
+  /* 確保 Logo 不超過導航列的高度 */
 }
 
 .navbar-nav .nav-item .nav-link {
@@ -81,7 +85,7 @@ export default {
   margin-left: 1rem;
   margin-right: 1rem;
   position: relative;
-  
+
   text-align: center;
   color: #fff;
 

@@ -4,7 +4,7 @@
     <div v-if="member">
       <p><strong>會員編號:</strong> {{ member.memberId }}</p>
       <p><strong>會員名稱:</strong> {{ member.memberName }}</p>
-      <p><strong>身分證字號:</strong> {{ member.idNumber }}</p>
+      <p><strong>身分證字號:</strong> {{ maskedIdNumber }}</p>
       <p><strong>密碼:</strong> ***********</p> <!-- 密碼不顯示 -->
       <p><strong>會員名稱:</strong> {{ editable ? editedMember.memberName : member.memberName }}</p>
       <p><strong>電話:</strong> {{ editable ? editedMember.phone : member.phone }}</p>
@@ -28,7 +28,7 @@
       <input v-model="editedMember.email" type="email" placeholder="請輸入Email">
       <div class="button-group">
         <button @click="cancelChanges">取消</button>
-      <button @click="saveChanges">保存變更</button>
+        <button @click="saveChanges">保存變更</button>
       </div>
     </div>
 
@@ -46,7 +46,14 @@ import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['member'])
+    ...mapGetters(['member']),
+    maskedIdNumber() {
+      if (this.member && this.member.idNumber) {
+        const idNumber = this.member.idNumber;
+        return idNumber.length > 4 ? `${idNumber.slice(0, -4)}****` : '****';
+      }
+      return '****';
+    }
   },
   data() {
     return {
@@ -111,25 +118,33 @@ export default {
 <style scoped>
 /* 會員資料頁面樣式 */
 .member-profile {
-  max-width: 800px; /* 調整最大寬度以適應新布局 */
+  max-width: 800px;
+  /* 調整最大寬度以適應新布局 */
   margin: 0 auto;
   padding: 20px;
   border-radius: 4px;
-  text-align: left; /* 讓文本靠左對齊 */
+  text-align: left;
+  /* 讓文本靠左對齊 */
   font-weight: 800;
   color: #ffffff;
-  display: flex; /* 使用 Flexbox */
-  flex-direction: column; /* 垂直方向排列 */
+  display: flex;
+  /* 使用 Flexbox */
+  flex-direction: column;
+  /* 垂直方向排列 */
 }
 
 .member-profile .content {
-  display: flex; /* 使用 Flexbox */
-  justify-content: space-between; /* 內容兩邊對齊 */
+  display: flex;
+  /* 使用 Flexbox */
+  justify-content: space-between;
+  /* 內容兩邊對齊 */
 }
 
 .member-profile .form-container {
-  flex: 1; /* 表單部分占據剩餘空間 */
-  margin-left: 20px; /* 表單與會員資料部分之間的間距 */
+  flex: 1;
+  /* 表單部分占據剩餘空間 */
+  margin-left: 20px;
+  /* 表單與會員資料部分之間的間距 */
 }
 
 p {
@@ -159,24 +174,33 @@ input {
 
 .button-group {
   display: flex;
-  justify-content: space-between; /* 使按鈕兩邊對齊，並分開 */
-  margin-top: 20px; /* 調整按鈕組的上邊距 */
+  justify-content: space-between;
+  /* 使按鈕兩邊對齊，並分開 */
+  margin-top: 20px;
+  /* 調整按鈕組的上邊距 */
 }
 
 .button-group button {
-  flex: 1; /* 按鈕寬度填滿父容器的寬度 */
-  margin: 0 10px; /* 在按鈕左右增加間距 */
+  flex: 1;
+  /* 按鈕寬度填滿父容器的寬度 */
+  margin: 0 10px;
+  /* 在按鈕左右增加間距 */
   padding: 10px 20px;
   font-size: 22px;
   cursor: pointer;
   font-weight: 800;
   border-radius: 5px;
-  background-color:#ff85b3;
-  display: flex; /* 使用 Flexbox 來對齊文字 */
-  align-items: center; /* 垂直置中 */
-  justify-content: center; /* 水平置中 */
+  background-color: #f06292;
+  display: flex;
+  /* 使用 Flexbox 來對齊文字 */
+  align-items: center;
+  /* 垂直置中 */
+  justify-content: center;
+  /* 水平置中 */
 }
+
 button:hover {
-  background-color: #681736; /* 滑鼠懸停時的背景顏色 */
+  background-color: #681736;
+  /* 滑鼠懸停時的背景顏色 */
 }
 </style>

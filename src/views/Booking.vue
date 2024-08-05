@@ -1,5 +1,5 @@
 <template>
-  <div class="container">   
+  <div class="container">
 
     <form @submit.prevent="submitForm" class="form" v-if="member">
       <div class="form-group">
@@ -77,10 +77,10 @@
         </div>
       </div>
       <div class="button-group">
-      <!-- 返回按鈕 -->
-      <button type="button" @click="goBack" class="return-button button-large">返回</button>
-      <button type="submit">訂位</button>
-    </div>
+        <!-- 返回按鈕 -->
+        <button type="button" @click="goBack" class="return-button button-large">返回</button>
+        <button type="submit">訂位</button>
+      </div>
     </form>
 
   </div>
@@ -94,7 +94,7 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
 export default {
-  
+
   computed: {
     member() {
       console.log('目前會員狀態:', this.$store.state.member);
@@ -159,64 +159,64 @@ export default {
       minDate: new Date().toISOString().split('T')[0]
     };
   },
-  
+
   methods: {
     calculateEndTime() {
-  const startHour = parseInt(this.order.startTime, 10);
-  const startMinute = parseInt(this.order.startTimeMinute, 10);
-  const singTime = parseInt(this.order.hours, 10);
+      const startHour = parseInt(this.order.startTime, 10);
+      const startMinute = parseInt(this.order.startTimeMinute, 10);
+      const singTime = parseInt(this.order.hours, 10);
 
-  if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime) && this.order.orderDate) {
-    let totalHours = startHour + singTime;
-    let endHour = totalHours % 24;
-    let nextDay = Math.floor(totalHours / 24);
-    let endDay = new Date(this.order.orderDate);
-    endDay.setDate(endDay.getDate() + nextDay);
+      if (!isNaN(startHour) && !isNaN(startMinute) && !isNaN(singTime) && this.order.orderDate) {
+        let totalHours = startHour + singTime;
+        let endHour = totalHours % 24;
+        let nextDay = Math.floor(totalHours / 24);
+        let endDay = new Date(this.order.orderDate);
+        endDay.setDate(endDay.getDate() + nextDay);
 
-    let endMinute = startMinute;
+        let endMinute = startMinute;
 
-    this.order.endTime = `${endDay.getFullYear()}-${(endDay.getMonth() + 1).toString().padStart(2, '0')}-${endDay.getDate().toString().padStart(2, '0')} ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
-  }
-},
+        this.order.endTime = `${endDay.getFullYear()}-${(endDay.getMonth() + 1).toString().padStart(2, '0')}-${endDay.getDate().toString().padStart(2, '0')} ${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+      }
+    },
 
 
     validateTime() {
-  const now = new Date();
-  const orderDate = new Date(this.order.orderDate);
-  const startHour = parseInt(this.order.startTime, 10);
-  const startMinute = parseInt(this.order.startTimeMinute, 10);
+      const now = new Date();
+      const orderDate = new Date(this.order.orderDate);
+      const startHour = parseInt(this.order.startTime, 10);
+      const startMinute = parseInt(this.order.startTimeMinute, 10);
 
-  now.setSeconds(0, 0);
+      now.setSeconds(0, 0);
 
-  if (orderDate.toDateString() === now.toDateString()) {
-    const selectedTime = new Date(orderDate);
-    selectedTime.setHours(startHour);
-    selectedTime.setMinutes(startMinute);
+      if (orderDate.toDateString() === now.toDateString()) {
+        const selectedTime = new Date(orderDate);
+        selectedTime.setHours(startHour);
+        selectedTime.setMinutes(startMinute);
 
-    if (selectedTime < now) {
-      Swal.fire({
-        icon: 'error',
-        title: '選擇錯誤',
-        text: '選擇的開始時間不能早於當前時間。',
-      });
-      return false;
-    }
-  } else if (orderDate < now) {
-    Swal.fire({
-      icon: 'error',
-      title: '選擇錯誤',
-      text: '訂位日期不能早於今天。',
-    });
-    return false;
-  }
+        if (selectedTime < now) {
+          Swal.fire({
+            icon: 'error',
+            title: '選擇錯誤',
+            text: '選擇的開始時間不能早於當前時間。',
+          });
+          return false;
+        }
+      } else if (orderDate < now) {
+        Swal.fire({
+          icon: 'error',
+          title: '選擇錯誤',
+          text: '訂位日期不能早於今天。',
+        });
+        return false;
+      }
 
-  // 更新可選的時間範圍
-  this.calculateEndTime();
+      // 更新可選的時間範圍
+      this.calculateEndTime();
 
-  return true;
-},
+      return true;
+    },
 
-resetTime() {
+    resetTime() {
       // 重置時間選擇框
       this.order.startTime = '';
       this.order.startTimeMinute = '';
@@ -224,67 +224,67 @@ resetTime() {
     },
 
     submitForm() {
-  const orderData = {
-    ...this.order,
-    memberId: this.member.memberId,
-    createBy: this.member.memberId,
-    updateBy: this.member.memberId,
-    createTime: new Date().toISOString(),
-    startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
-  };
+      const orderData = {
+        ...this.order,
+        memberId: this.member.memberId,
+        createBy: this.member.memberId,
+        updateBy: this.member.memberId,
+        createTime: new Date().toISOString(),
+        startTime: `${this.order.startTime.padStart(2, '0')}:${this.order.startTimeMinute.padStart(2, '0')}`
+      };
 
-  // 发起第一次请求
-  axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
-    .then(response => {
-      console.log('roomCheck response:', response);
+      // 发起第一次请求
+      axios.post('http://localhost:8080/ktv-app/roomCheck', orderData)
+        .then(response => {
+          console.log('roomCheck response:', response);
 
-      if (response.data.success) {
-        // 如果第一次请求成功，发起第二次请求
-        return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
-      } else {
-        // 如果第一次请求失败，显示提示框
-        return Swal.fire({
-          icon: 'question',
-          text: response.data.message,
-          allowOutsideClick: false,
-          showConfirmButton: true,
-          showCancelButton: true
-        }).then(result => {
-          if (result.isConfirmed) {
-            // 用户确认后发起第二次请求
+          if (response.data.success) {
+            // 如果第一次请求成功，发起第二次请求
             return axios.post('http://localhost:8080/ktv-app/ktvbackend/orders/testNewOrder', orderData);
           } else {
-            // 用户取消了操作，关闭弹窗
-            Swal.close();
-            // 返回一个空 Promise，以确保链式调用不会继续
-            return Promise.resolve();
+            // 如果第一次请求失败，显示提示框
+            return Swal.fire({
+              icon: 'question',
+              text: response.data.message,
+              allowOutsideClick: false,
+              showConfirmButton: true,
+              showCancelButton: true
+            }).then(result => {
+              if (result.isConfirmed) {
+                // 用户确认后发起第二次请求
+                return axios.post('/ktv-app/ktvbackend/orders/testNewOrder', orderData);
+              } else {
+                // 用户取消了操作，关闭弹窗
+                Swal.close();
+                // 返回一个空 Promise，以确保链式调用不会继续
+                return Promise.resolve();
+              }
+            });
           }
-        });
-      }
-    })
-    .then(response => {
-      if (response && response.data && response.data.success) {
-        // 如果第二次请求成功，显示成功提示并跳转
-        return Swal.fire({
-          icon: 'success',
-          title: '訂位成功',
-          text: response.data.message,
-        }).then(() => {
-          this.$router.push({ path: '/orderlist' });
-        });
-      } 
-    })
-    .catch(error => {
-      // 捕捉并处理任何错误
-      console.error('Error occurred:', error);
+        })
+        .then(response => {
+          if (response && response.data && response.data.success) {
+            // 如果第二次请求成功，显示成功提示并跳转
+            return Swal.fire({
+              icon: 'success',
+              title: '訂位成功',
+              text: response.data.message,
+            }).then(() => {
+              this.$router.push({ path: '/orderlist' });
+            });
+          }
+        })
+        .catch(error => {
+          // 捕捉并处理任何错误
+          console.error('Error occurred:', error);
 
-      Swal.fire({
-        icon: 'error',
-        title: '訂位失敗',
-        text: error.message || '訂位過程中發生錯誤。',
-      });
-    });
-},
+          Swal.fire({
+            icon: 'error',
+            title: '訂位失敗',
+            text: error.message || '訂位過程中發生錯誤。',
+          });
+        });
+    },
     goBack() {
       this.$router.go(-1); // 返回到上一頁
     }
@@ -298,6 +298,7 @@ resetTime() {
   justify-content: center;
   align-items: center;
 }
+
 .room-title {
   text-align: center;
   color: #fff;
@@ -306,18 +307,24 @@ resetTime() {
   font-weight: bold;
   background: none;
   text-shadow: 3px 3px 6px orange;
-}  
+}
+
 .form {
   color: white;
   width: 600px;
   padding: 20px;
-  border: 1px solid rgba(0, 0, 0, 0); /* 淡色透明邊框 */
-  border-radius: 8px; /* 圓角邊框 */
-  background-color: rgba(255, 255, 255, 0); /* 完全透明背景色 */
+  border: 1px solid rgba(0, 0, 0, 0);
+  /* 淡色透明邊框 */
+  border-radius: 8px;
+  /* 圓角邊框 */
+  background-color: rgba(255, 255, 255, 0);
+  /* 完全透明背景色 */
   margin-top: 20px;
   margin-bottom: 5%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0); /* 柔和的陰影效果 */
-  backdrop-filter: blur(0px); /* 背景模糊效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+  /* 柔和的陰影效果 */
+  backdrop-filter: blur(0px);
+  /* 背景模糊效果 */
 }
 
 /* 動畫效果 */
@@ -325,6 +332,7 @@ resetTime() {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -335,6 +343,7 @@ resetTime() {
     transform: translateY(-20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -345,17 +354,23 @@ resetTime() {
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
 }
 
 /* 表單過渡動畫 */
-.form-enter-active, .form-leave-active {
+.form-enter-active,
+.form-leave-active {
   animation-duration: 0.5s;
 }
 
-.form-enter, .form-leave-to /* .form-leave-active in <2.1.8 */ {
+.form-enter,
+.form-leave-to
+
+/* .form-leave-active in <2.1.8 */
+  {
   animation-name: slideInFromTop;
 }
 
@@ -383,23 +398,30 @@ select {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 添加過渡動畫 */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  /* 添加過渡動畫 */
 }
 
 input:focus,
 select:focus {
-  border-color: #007BFF; /* 聚焦時邊框顏色 */
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* 聚焦時陰影效果 */
+  border-color: #007BFF;
+  /* 聚焦時邊框顏色 */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  /* 聚焦時陰影效果 */
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between; /* 使按鈕兩邊對齊，並分開 */
-  
+  justify-content: space-between;
+  /* 使按鈕兩邊對齊，並分開 */
+
 }
+
 .button-group button {
-  flex: 1; /* 按鈕寬度填滿父容器的寬度 */
-  margin: 0 10px; /* 在按鈕左右增加間距 */
+  flex: 1;
+  /* 按鈕寬度填滿父容器的寬度 */
+  margin: 0 10px;
+  /* 在按鈕左右增加間距 */
   text-align: center;
   padding: 4px 20px;
   padding-bottom: 5px;
@@ -407,7 +429,7 @@ select:focus {
   cursor: pointer;
   font-weight: 800;
   border-radius: 4px;
-  background-color:#f06292;
+  background-color: #f06292;
   height: 40px;
   color: white;
   margin-top: 10px;
@@ -418,7 +440,8 @@ button:hover {
 }
 
 button:active {
-  transform: scale(0.98); /* 點擊時稍微縮小 */
+  transform: scale(0.98);
+  /* 點擊時稍微縮小 */
 }
 
 .return-button {
@@ -458,6 +481,7 @@ button:active {
     max-width: 100%;
   }
 }
+
 .endtime {
   color: white;
 }

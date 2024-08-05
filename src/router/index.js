@@ -13,7 +13,7 @@ import NewsShow from '../views/NewsShow.vue';
 import Orderlist from '../views/Orderlist.vue';
 import Booking from '../views/Booking.vue';
 import Room from '../views/Room.vue';
-
+import ChangePassword from '../views/ChangePassword.vue';
 
 // 定義路由
 const routes = [
@@ -30,6 +30,7 @@ const routes = [
     { path: '/orderlist', component: Orderlist },//會員個人訂單
     { path: '/booking', name: 'Booking', component: Booking, props: true },
     { path: '/room', component: Room },//門市地點
+    { path: '/change-password', component: ChangePassword },//會員中心更改密碼
 ];
 
 // 創建 router 實例

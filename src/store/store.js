@@ -21,7 +21,7 @@ export default createStore({
     actions: {
         async fetchMemberProfile({ commit, state }) {
             try {
-                const response = await axios.get(`/members/${state.idNumber}`); // 確保 URL 正確
+                const response = await axios.get(`api/members/${state.idNumber}`); // 確保 URL 正確
                 if (response.status === 200) {
                     commit('setMember', response.data); // 更新會員資料
                 } else {
@@ -33,7 +33,7 @@ export default createStore({
         },
         async updateMemberInfo({ commit }, updatedMemberInfo) {
             try {
-                const response = await axios.put(`/members/${updatedMemberInfo.idNumber}`, updatedMemberInfo);
+                const response = await axios.put(`api/members/${updatedMemberInfo.idNumber}`, updatedMemberInfo);
                 if (response.status === 200) {
                     commit('setMember', response.data); // 更新會員資料
                 } else {
@@ -50,7 +50,7 @@ export default createStore({
 
         async logout({ commit }) {
             try {
-                const response = await axios.post('/logout');
+                const response = await axios.post('api/logout');
                 if (response.status === 200) {
                     commit('clearUser'); // 清空用戶資料
                     localStorage.removeItem('idNumber'); // 清除 localStorage 中的 ID Number
