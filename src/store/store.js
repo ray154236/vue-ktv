@@ -55,6 +55,8 @@ export default createStore({
                     commit('clearUser'); // 清空用戶資料
                     localStorage.removeItem('idNumber'); // 清除 localStorage 中的 ID Number
                     localStorage.removeItem('token'); // 確保清除 token
+                    sessionStorage.removeItem('idNumber'); // 清除 sessionStorage 中的 ID Number
+                    sessionStorage.removeItem('token'); // 確保清除 token
                 } else {
                     console.error('登出失敗', response.statusText);
                 }

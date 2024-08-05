@@ -9,9 +9,10 @@
         </div>
         <div class="input-group">
           <label for="password">密碼：</label> <!-- 密碼標籤 -->
-          <input v-model="password" type="password" id="password" required autocomplete="current-password" /> <!-- 輸入密碼 -->
+          <input v-model="password" type="password" id="password" required autocomplete="current-password" />
+          <!-- 輸入密碼 -->
         </div>
-       
+
 
         <button type="submit">登入</button> <!-- 登入按鈕 -->
         <div class="links">
@@ -25,44 +26,48 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 export default {
   data() {
     return {
-      idNumber: '', // 身分證字號狀態
-      password: '', // 密碼狀態
-      message: '' // 顯示訊息狀態
+      idNumber: '',
+      password: '',
+      message: ''
     };
   },
   methods: {
-    ...mapActions(['setIdNumber', 'fetchMemberProfile']),
     async handleSubmit() {
       try {
-        const response = await fetch('/ktv-app/api/login', { // 發送登入請求到後端
+        const response = await fetch('/ktv-app/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ idNumber: this.idNumber, password: this.password }) // 發送的 JSON 資料
+          body: JSON.stringify({ idNumber: this.idNumber, password: this.password })
         });
 
-        if (response.ok) { // 如果回應成功
+        if (response.ok) {
+          const data = await response.json();
           console.log('登入成功');  // F12 顯示成功訊息
           this.message = '登入成功!';
 
-          // 保存 ID Number 和其他登入資訊到 localStorage
-          localStorage.setItem('idNumber', this.idNumber);
-          // 保存 ID Number 到 Vuex Store
-          this.setIdNumber(this.idNumber);
-          await this.fetchMemberProfile();  // 確保 Vuex actions 獲取會員資料
-          this.$router.push('/member');  // 跳轉到會員基本資料頁面
+          // 保存 ID Number 和其他登入資訊到 sessionStorage
+          sessionStorage.setItem('idNumber', this.idNumber);
+          sessionStorage.setItem('token', data.token); // 使用從後端獲取的實際 token
+
+          // 保存 ID Number 到 Vuex Store（確保已經在 store 中定義了相應的 mutation 或 action）
+          this.$store.commit('setIdNumber', this.idNumber);
+
+          // 如果需要，可以在這裡調用方法來獲取會員資料
+          await this.$store.dispatch('fetchMemberProfile');
+
+          // 重定向到會員頁面
+          this.$router.push('/member');
         } else {
-          const errorData = await response.text(); // 如果回應不成功，顯示錯誤訊息
+          const errorData = await response.text();
           this.message = `密碼錯誤！`;
         }
       } catch (error) {
-        console.error('Error:', error); // 如果有錯誤，顯示錯誤訊息
+        console.error('Error:', error);
         this.message = '發生錯誤';
       }
     }
@@ -72,87 +77,131 @@ export default {
 
 <style scoped>
 .login {
-  display: flex; /* 使用 Flexbox 進行排版 */
-  justify-content: center; /* 水平置中 */
-  align-items: center; /* 垂直置中 */
-  min-height: 60vh; /* 最小高度為螢幕高度的 60% */
-  background: none; /* 保持網頁原背景 */
+  display: flex;
+  /* 使用 Flexbox 進行排版 */
+  justify-content: center;
+  /* 水平置中 */
+  align-items: center;
+  /* 垂直置中 */
+  min-height: 60vh;
+  /* 最小高度為螢幕高度的 60% */
+  background: none;
+  /* 保持網頁原背景 */
 }
 
 .login-form {
-  width: 400px; /* 登入表單寬度 */
-  padding: 20px; /* 內邊距 */
-  border-radius: 5px; /* 圓角 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
-  text-align: center; /* 文字置中 */
+  width: 400px;
+  /* 登入表單寬度 */
+  padding: 20px;
+  /* 內邊距 */
+  border-radius: 5px;
+  /* 圓角 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* 陰影效果 */
+  text-align: center;
+  /* 文字置中 */
 }
 
 .login-form h1 {
-  margin-bottom: 20px; /* 標題底部間距 */
-  font-size: 24px; /* 字體大小 */
-  color: #fff; /* 字體顏色 */
+  margin-bottom: 20px;
+  /* 標題底部間距 */
+  font-size: 24px;
+  /* 字體大小 */
+  color: #fff;
+  /* 字體顏色 */
   font-weight: bold;
 }
 
 .input-group {
-  margin-bottom: 15px; /* 輸入組底部間距 */
-  text-align: left; /* 文字左對齊 */
+  margin-bottom: 15px;
+  /* 輸入組底部間距 */
+  text-align: left;
+  /* 文字左對齊 */
   font-size: 22px;
 }
 
 .input-group label {
-  display: block; /* 顯示為區塊元素 */
-  margin-bottom: 5px; /* 標籤底部間距 */
-  font-weight: bold; /* 粗體字 */
-  color: #ffffff; /* 字體顏色 */
+  display: block;
+  /* 顯示為區塊元素 */
+  margin-bottom: 5px;
+  /* 標籤底部間距 */
+  font-weight: bold;
+  /* 粗體字 */
+  color: #ffffff;
+  /* 字體顏色 */
 }
 
 .input-group input {
-  width: 100%; /* 輸入框寬度 */
-  padding: 8px; /* 內邊距 */
-  border: 1px solid #ccc; /* 灰色邊框 */
-  border-radius: 5px; /* 圓角 */
-  box-sizing: border-box; /* 盒模型 */
+  width: 100%;
+  /* 輸入框寬度 */
+  padding: 8px;
+  /* 內邊距 */
+  border: 1px solid #ccc;
+  /* 灰色邊框 */
+  border-radius: 5px;
+  /* 圓角 */
+  box-sizing: border-box;
+  /* 盒模型 */
 }
 
 button {
-  width: 100%; /* 按鈕寬度 */
-  padding: 10px; /* 內邊距 */
-  background-color: #ff85b3; /* 按鈕背景顏色 */
-  color: white; /* 字體顏色 */
-  border: none; /* 無邊框 */
-  border-radius: 5px; /* 圓角 */
-  cursor: pointer; /* 游標類型 */
-  font-size: 24px; /* 字體大小 */
-  margin-top: 10px; /* 按鈕頂部間距 */
+  width: 100%;
+  /* 按鈕寬度 */
+  padding: 10px;
+  /* 內邊距 */
+  background-color: #ff85b3;
+  /* 按鈕背景顏色 */
+  color: white;
+  /* 字體顏色 */
+  border: none;
+  /* 無邊框 */
+  border-radius: 5px;
+  /* 圓角 */
+  cursor: pointer;
+  /* 游標類型 */
+  font-size: 24px;
+  /* 字體大小 */
+  margin-top: 10px;
+  /* 按鈕頂部間距 */
   font-weight: 800;
 }
 
 button:hover {
-  background-color: #681736; /* 滑鼠懸停時的背景顏色 */
+  background-color: #681736;
+  /* 滑鼠懸停時的背景顏色 */
 }
 
 .links {
-  display: flex; /* 使用 Flexbox 進行排版 */
-  justify-content: space-between; /* 空間平均分配 */
-  margin-top: 10px; /* 鏈接頂部間距 */
+  display: flex;
+  /* 使用 Flexbox 進行排版 */
+  justify-content: space-between;
+  /* 空間平均分配 */
+  margin-top: 10px;
+  /* 鏈接頂部間距 */
 }
 
 .links a {
-  color: #ffffff; /* 鏈接字體顏色 */
-  text-decoration: none; /* 無下劃線 */
-  font-size: 20px; /* 字體大小 */
+  color: #ffffff;
+  /* 鏈接字體顏色 */
+  text-decoration: none;
+  /* 無下劃線 */
+  font-size: 20px;
+  /* 字體大小 */
   font-weight: 800;
 }
 
 .links a:hover {
-  text-decoration: underline; /* 滑鼠懸停時添加下劃線 */
+  text-decoration: underline;
+  /* 滑鼠懸停時添加下劃線 */
 }
 
 p {
-  color: red; /* 段落文字顏色 */
-  margin-top: 20px; /* 段落頂部間距 */
+  color: red;
+  /* 段落文字顏色 */
+  margin-top: 20px;
+  /* 段落頂部間距 */
 }
+
 .room-title {
   text-align: center;
   color: #fff;
