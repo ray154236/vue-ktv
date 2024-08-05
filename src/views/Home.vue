@@ -55,7 +55,7 @@ export default {
       activeIndex: 0,    // 初始化為第一個輪播項目的索引
       intervalId: null, // 存儲定時器 ID，用於控制自動輪播
       songs:[
-  { id: 1, title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', lastWeekRank: "1 →" },
+  { id: 1, title: '在加納共和國離婚', artist: '菲道爾、Dior大穎', lastWeekRank: "1 -" },
   { id: 2, title: '擱淺', artist: '周杰倫', lastWeekRank: "3 ↑" },
   { id: 3, title: '妥協', artist: '蔡依林', lastWeekRank: "4 ↑" },
   { id: 4, title: '字字句句', artist: '盧盧快閉嘴', lastWeekRank: "5 ↓" },
@@ -65,13 +65,13 @@ export default {
   { id: 8, title: '倒帶', artist: '蔡依林', lastWeekRank: "9 ↑" },
   { id: 9, title: '如果可以', artist: '韋禮安', lastWeekRank: "14 ↑" },
   { id: 10, title: '訣愛', artist: 'Faye 詹雯婷', lastWeekRank: "8 ↓" },
-  { id: 11, title: '嘉賓', artist: '張遠', lastWeekRank: "11 →" },
+  { id: 11, title: '嘉賓', artist: '張遠', lastWeekRank: "11 -" },
   { id: 12, title: '慢冷', artist: '梁靜茹', lastWeekRank: "15 ↑" },
   { id: 13, title: '從前說', artist: '小阿七', lastWeekRank: "12 ↓" },
   { id: 14, title: '我很好騙', artist: '動力火車', lastWeekRank: "16 ↑" },
   { id: 15, title: '離開的一路上', artist: '理想混蛋', lastWeekRank: "13 ↓" },
   { id: 16, title: '想和你看五月的晚霞', artist: '陳華 Hua Chen', lastWeekRank: "18 ↑" },
-  { id: 17, title: '我會等', artist: '承桓', lastWeekRank: "17 →" },
+  { id: 17, title: '我會等', artist: '承桓', lastWeekRank: "17 -" },
   { id: 18, title: '家家酒', artist: '家家', lastWeekRank: "20 ↑" },
   { id: 19, title: '痴心絕對', artist: '李聖傑', lastWeekRank: "21 ↑" },
   { id: 20, title: '我懷念的', artist: '孫燕姿', lastWeekRank: "19 ↓" },
@@ -80,10 +80,10 @@ export default {
   { id: 23, title: '專屬天使', artist: 'TANK', lastWeekRank: "22 ↓" },
   { id: 24, title: '雨愛', artist: '楊丞琳', lastWeekRank: "25 ↓" },
   { id: 25, title: '體面', artist: '于文文', lastWeekRank: "27 ↑" },
-  { id: 26, title: 'Without You', artist: '高爾宣OSN', lastWeekRank: "26 →" },
+  { id: 26, title: 'Without You', artist: '高爾宣OSN', lastWeekRank: "26 -" },
   { id: 27, title: '總會有人', artist: '向思思', lastWeekRank: "24 ↓" },
   { id: 28, title: '孤勇者', artist: '陳奕迅', lastWeekRank: "33 ↑" },
-  { id: 29, title: '修煉愛情', artist: '林俊傑', lastWeekRank: "29 →" },
+  { id: 29, title: '修煉愛情', artist: '林俊傑', lastWeekRank: "29 -" },
   { id: 30, title: '給我一個理由忘記', artist: 'A-Lin', lastWeekRank: "25 ↓" }
 ],
       currentPage: 1,   // 當前頁碼
@@ -219,9 +219,6 @@ export default {
 .song-ranking {
   margin-top: 20px;
   padding: 10px;
-  background-image: url('http://localhost:8080/ktv-app/news/news/image/background-image.jpg'); /* 替換為你的背景圖片路徑 */
-  background-size: cover; /* 使背景圖片覆蓋整個區域 */
-  background-position: center; /* 使背景圖片居中顯示 */
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   color: white; /* 設置文字顏色為白色 */
