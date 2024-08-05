@@ -26,9 +26,9 @@
       </div>
     </div>
     <div class="button-group">
-      <!-- 返回按鈕 -->
-      <button type="button" @click="goHome">返回首頁</button>
-    </div>
+    <!-- 返回按鈕 -->
+    <button type="button" @click="goHome" >回首頁</button>
+  </div>
   </div>
 </template>
 
@@ -198,31 +198,28 @@ export default {
 
 .button-group {
   display: flex;
-  justify-content: space-between;
-  /* 使按鈕兩邊對齊，並分開 */
-
+  justify-content: space-around; /* 按钮均匀分布 */
+  flex-wrap: wrap; /* 使按钮在小屏幕上换行 */
+  gap: 20px; /* 按钮之间的间距 */
+  margin-top: 20px; /* 在按钮组顶部增加间距 */
 }
 
 .button-group button {
-  flex: 1;
-  /* 按鈕寬度填滿父容器的寬度 */
-  margin: 0 450px;
-  /* 在按鈕左右增加間距 */
-  text-align: center;
-  padding: 4px 20px;
-  padding-bottom: 5px;
-  font-size: 18px;
+  flex: 1 1 auto; /* 按钮在容器中自动调整大小 */
+  min-width: 150px; /* 按钮的最小宽度 */
+  max-width: 300px; /* 按钮的最大宽度 */
+  padding: 10px;
+  font-size: 16px;
   cursor: pointer;
   font-weight: 800;
   border-radius: 4px;
   background-color: #f06292;
-  height: 40px;
   color: white;
-  margin-top: 50px;
-
+  border: none;
+  text-align: center;
 }
 
-button:hover {
+.button-group button:hover {
   background-color: #681736;
 }
 </style>
