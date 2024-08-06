@@ -59,7 +59,7 @@ export default {
           console.log('獲取到的新聞數據:', news); // 調試數據
 
           this.news = {
-            ...news,
+            ...response.data.news, // 將 API 返回的 news 內容直接賦值給 this.news
             activityStartDate: this.formatDate(news.activityStartDate),
             endDate: this.formatDate(news.endDate),
             imageUrl: news.image ? `data:image/jpeg;base64,${news.image}` : null
