@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     fetchNewsDetails() {
-      axios.get(`/ktv-app/news/news/find/${this.newsId}`)
+      axios.get(`/ktv-app/news/find/${this.newsId}`)
         .then(response => {
           const news = response.data || {};
           console.log('獲取到的新聞數據:', news); // 調試數據
