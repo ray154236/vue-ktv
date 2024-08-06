@@ -18,7 +18,7 @@
 
     <div class="news-grid">
       <div v-for="news in filteredNews" :key="news.newsId" class="news-item" @click="newsShow(news.newsId)">
-        <img :src="`/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`http://localhost:8080/ktv-app/news/news/image/${news.newsId}`" class="news-image" alt="新聞圖片">
         <div class="news-details">
           <p class="news-date">{{ formatDate(news.activityStartDate) }} 至 {{ formatDate(news.endDate) }}</p>
           <h3 class="news-title">{{ news.title }}</h3>
@@ -72,7 +72,7 @@ export default {
       return new Date(date).toLocaleDateString('zh-TW');
     },
     fetchNews() {
-  axios.get('/ktv-app/news/news')
+  axios.get('http://localhost:8080/ktv-app/news/news')
     .then(response => {
       this.newsList = response.data.list.filter(news => news.status === 'active').map(news => {
         return {
@@ -94,7 +94,7 @@ export default {
     },
     searchByTitle() {
       if (this.searchKeyword.trim() !== '') {
-        axios.get(`/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
+        axios.get(`http://localhost:8080/ktv-app/news/news/searchByTitle?keyword=${this.searchKeyword}`)
           .then(response => {
             this.newsList = response.data.filter(news => news.status === 'active').map(news => {
               return {

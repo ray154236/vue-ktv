@@ -6,7 +6,7 @@
 
       <!-- 新聞圖片 -->
       <div class="news-image">
-        <img :src="`/ktv-app/news/news/image/${newsId}`" class="news-image" alt="新聞圖片">
+        <img :src="`http://localhost:8080/ktv-app/news/news/image/${newsId}`" class="news-image" alt="新聞圖片">
       </div>
 
       <!-- 新聞內容 -->
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     fetchNewsDetails() {
-      axios.get(`/ktv-app/news/find/${this.newsId}`)
+      axios.get(`http://localhost:8080/ktv-app/news/find/${this.newsId}`)
         .then(response => {
           const news = response.data || {};
           console.log('獲取到的新聞數據:', news); // 調試數據

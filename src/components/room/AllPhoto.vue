@@ -95,7 +95,7 @@ const isRoomAmountVisible = ref(false);
 
 async function fetchPhotos() {
   try {
-    const response = await axios.get('/ktv-app/photos/findAll');
+    const response = await axios.get('http://localhost:8080/ktv-app/photos/findAll');
     photos.value = response.data;
     console.log("photos.value = ", response.data)
   } catch (error) {
