@@ -40,13 +40,6 @@
     <div class="page">第 {{ currentPage }} 頁/共 {{ totalPages }} 頁</div>
     <div class="changepage">
       <div class="pagination">
-        <button @click="goToPage(1)" :disabled="currentPage === 1">
-          << </button>
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-              < </button>
-                <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
-                <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
-                =======
                 <button @click="goToPage(1)" :disabled="currentPage === 1">
                   << </button>
                     <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
