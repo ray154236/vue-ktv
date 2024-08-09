@@ -12,10 +12,15 @@
           <input v-model="password" type="password" id="password" required autocomplete="current-password" />
         </div>
         <div class="input-group">
-          <label for="captcha">驗證碼：</label>
-          <div id="captcha">{{ captchaCode }}</div>
+          <label for="captcha" style="color: white;">驗證碼：</label>
+          <div id="captcha"
+            style="color: white;"
+            @click="generateCaptcha"
+            oncontextmenu="return false;"
+            onselectstart="return false;"
+            draggable="false"
+            class="captcha-code">{{ captchaCode }}</div>
           <input v-model="captchaInput" type="text" id="captcha" required placeholder="請輸入驗證碼" />
-          <button type="button" @click="generateCaptcha">生成驗證碼</button>
         </div>
         <button type="submit">登入</button>
         <div class="links">
