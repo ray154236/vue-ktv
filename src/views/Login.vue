@@ -11,16 +11,12 @@
           <label for="password">密碼：</label>
           <input v-model="password" type="password" id="password" required autocomplete="current-password" />
         </div>
-        <div class="input-group">
-          <label for="captcha" style="color: white;">驗證碼：</label>
-          <div id="captcha"
-            style="color: white;"
-            @click="generateCaptcha"
-            oncontextmenu="return false;"
-            onselectstart="return false;"
-            draggable="false"
-            class="captcha-code">{{ captchaCode }}</div>
-          <input v-model="captchaInput" type="text" id="captcha" required placeholder="請輸入驗證碼" />
+        <div class="input-group captcha-group">
+          <label for="captcha">驗證碼：</label>
+          <div class="captcha-container">
+            <canvas ref="captchaCanvas" width="150" height="50" @click="generateCaptcha"></canvas>
+            <input v-model="captchaInput" type="text" id="captcha" class="captcha-input" required />
+          </div>
         </div>
         <button type="submit">登入</button>
         <div class="links">
@@ -39,21 +35,73 @@ export default {
     return {
       idNumber: '',
       password: '',
-      captchaCode: '',
       captchaInput: '',
+      captchaCode: '',
       message: ''
     };
   },
+  mounted() {
+    this.generateCaptcha();
+  },
   methods: {
     generateCaptcha() {
-      this.captchaCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+      const canvas = this.$refs.captchaCanvas;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        console.error('Cannot get canvas context.');
+        return;
+      }
+
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      this.captchaCode = '';
+      for (let i = 0; i < 4; i++) {
+        this.captchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 設定背景顏色
+      ctx.fillStyle = '#f0f0f0'; // 設定為淺灰色，根據需要調整
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 繪製隨機干擾線條
+      for (let i = 0; i < 5; i++) {
+        ctx.strokeStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.stroke();
+      }
+
+      // 繪製隨機點
+      for (let i = 0; i < 100; i++) {
+        ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.5)`;
+        ctx.beginPath();
+        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 繪製驗證碼字
+      for (let i = 0; i < this.captchaCode.length; i++) {
+        ctx.save();
+        ctx.font = `${Math.random() * 20 + 20}px Arial`;
+        ctx.fillStyle = `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const x = (i + 0.5) * canvas.width / this.captchaCode.length;
+        const y = canvas.height / 2;
+        ctx.translate(x, y);
+        ctx.rotate(Math.random() * 0.5 - 0.25); // 隨機旋轉
+        ctx.fillText(this.captchaCode.charAt(i), 0, 0);
+        ctx.restore();
+      }
     },
     async handleSubmit() {
       if (this.captchaInput !== this.captchaCode) {
         this.message = '驗證碼錯誤！';
         return;
       }
-      
+
       try {
         const response = await fetch('/ktv-app/api/login', {
           method: 'POST',
@@ -65,15 +113,20 @@ export default {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('登入成功');  // F12 顯示成功訊息
+          console.log('登入成功'); // F12 顯示成功訊息
           this.message = '登入成功!';
 
+          // 保存 ID Number 和其他登入資訊到 sessionStorage
           sessionStorage.setItem('idNumber', this.idNumber);
           sessionStorage.setItem('token', data.token); // 使用從後端獲取的實際 token
 
+          // 保存 ID Number 到 Vuex Store（確保已經在 store 中定義了相應的 mutation 或 action）
           this.$store.commit('setIdNumber', this.idNumber);
+
+          // 如果需要，可以在這裡調用方法來獲取會員資料
           await this.$store.dispatch('fetchMemberProfile');
 
+          // 重定向到會員頁面
           this.$router.push('/member');
         } else {
           const errorData = await response.text();
@@ -84,9 +137,6 @@ export default {
         this.message = '發生錯誤';
       }
     }
-  },
-  created() {
-    this.generateCaptcha(); // 初始化驗證碼
   }
 };
 </script>
@@ -94,135 +144,115 @@ export default {
 <style scoped>
 .login {
   display: flex;
-  /* 使用 Flexbox 進行排版 */
   justify-content: center;
-  /* 水平置中 */
   align-items: center;
-  /* 垂直置中 */
   min-height: 60vh;
-  /* 最小高度為螢幕高度的 60% */
   background: none;
-  /* 保持網頁原背景 */
 }
 
 .login-form {
   width: 400px;
-  /* 登入表單寬度 */
   padding: 20px;
-  /* 內邊距 */
   border-radius: 5px;
-  /* 圓角 */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* 陰影效果 */
   text-align: center;
-  /* 文字置中 */
 }
 
-.login-form h1 {
+.login-form h5 {
   margin-bottom: 20px;
-  /* 標題底部間距 */
   font-size: 24px;
-  /* 字體大小 */
   color: #fff;
-  /* 字體顏色 */
   font-weight: bold;
 }
 
 .input-group {
   margin-bottom: 15px;
-  /* 輸入組底部間距 */
   text-align: left;
-  /* 文字左對齊 */
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .input-group label {
   display: block;
-  /* 顯示為區塊元素 */
   margin-bottom: 5px;
-  /* 標籤底部間距 */
   font-weight: bold;
-  /* 粗體字 */
   color: #ffffff;
-  /* 字體顏色 */
 }
 
 .input-group input {
   width: 100%;
-  /* 輸入框寬度 */
   padding: 8px;
-  /* 內邊距 */
   border: 1px solid #ccc;
-  /* 灰色邊框 */
   border-radius: 5px;
-  /* 圓角 */
   box-sizing: border-box;
-  /* 盒模型 */
+}
+
+.captcha-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.captcha-container {
+  display: flex;
+  align-items: center;
+}
+
+.captcha-container canvas {
+  margin-right: 10px;
+}
+
+.captcha-input {
+  width: 80px; /* 調整為合適的寬度 */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 button {
   width: 100%;
-  /* 按鈕寬度 */
   padding: 10px;
-  /* 內邊距 */
   background-color: #ff85b3;
-  /* 按鈕背景顏色 */
   color: white;
-  /* 字體顏色 */
   border: none;
-  /* 無邊框 */
   border-radius: 5px;
-  /* 圓角 */
   cursor: pointer;
-  /* 游標類型 */
-  font-size: 24px;
-  /* 字體大小 */
+  font-size: 18px;
   margin-top: 10px;
-  /* 按鈕頂部間距 */
   font-weight: 800;
 }
 
 button:hover {
   background-color: #681736;
-  /* 滑鼠懸停時的背景顏色 */
 }
 
 .links {
   display: flex;
-  /* 使用 Flexbox 進行排版 */
   justify-content: space-between;
-  /* 空間平均分配 */
   margin-top: 10px;
-  /* 鏈接頂部間距 */
 }
 
 .links a {
   color: #ffffff;
-  /* 鏈接字體顏色 */
   text-decoration: none;
-  /* 無下劃線 */
-  font-size: 20px;
-  /* 字體大小 */
+  font-size: 16px;
   font-weight: 800;
 }
 
 .links a:hover {
   text-decoration: underline;
-  /* 滑鼠懸停時添加下劃線 */
 }
 
 p {
   color: red;
-  /* 段落文字顏色 */
   margin-top: 20px;
-  /* 段落頂部間距 */
 }
 
 .room-title {
   text-align: center;
   color: #fff;
   margin-bottom: 80px;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bold;
   background: none;
   text-shadow: 3px 3px 6px orange;
