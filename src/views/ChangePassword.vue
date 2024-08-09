@@ -49,6 +49,8 @@ export default {
                 if (response && response.data) {
                     this.message = response.data;
                     this.success = true;
+                    alert(this.message);
+                    this.$router.push('/member');
                 } else {
                     this.message = '密碼更新失敗';
                     this.success = false;

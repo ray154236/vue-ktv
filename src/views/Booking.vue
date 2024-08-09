@@ -119,7 +119,7 @@ export default {
     },
     singTimehours() {
       const hours = [];
-      for (let i = 1; i < 13; i++) {
+      for (let i = 3; i < 13; i++) {
         hours.push(i.toString().padStart(2, '0'));
       }
       return hours;

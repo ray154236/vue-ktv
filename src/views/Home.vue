@@ -40,13 +40,6 @@
     <div class="page">第 {{ currentPage }} 頁/共 {{ totalPages }} 頁</div>
     <div class="changepage">
       <div class="pagination">
-        <button @click="goToPage(1)" :disabled="currentPage === 1">
-          << </button>
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-              < </button>
-                <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">></button>
-                <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages">>></button><br>
-                =======
                 <button @click="goToPage(1)" :disabled="currentPage === 1">
                   << </button>
                     <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
@@ -134,14 +127,14 @@ export default {
   },
   methods: {
     fetchSlides() {
-      axios.get('http://localhost:8080/ktv-app/news/news')
+      axios.get('/ktv-app/news/news')
         .then(response => {
           if (response.data && Array.isArray(response.data.list)) {
             this.activeSlides = response.data.list
               .filter(news => news.status === 'active')
               .map((news, index) => ({
-                image: `http://localhost:8080/ktv-app/news/news/image/${news.newsId}`,
-                smallImage: `http://localhost:8080/ktv-app/news/news/${news.newsId}/smallImage`,
+                image: `/ktv-app/news/news/image/${news.newsId}`,
+                smallImage: `/ktv-app/news/news/${news.newsId}/smallImage`,
                 altText: `Slide ${index + 1}`,
                 newsId: news.newsId,
                 active: index === 0
