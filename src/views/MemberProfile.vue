@@ -23,9 +23,7 @@
       <label>電話:</label>
       <input v-model="editedMember.phone" type="text" placeholder="請輸入電話" @input="validatePhone" maxlength="10"
         pattern="\d{10}" title="電話號碼必須是10位數字" />
-      <label>生日:</label>
-      <input v-model="editedMember.birth" type="date">
-      <label>Email:</label>
+            <label>Email:</label>
       <input v-model="editedMember.email" type="email" placeholder="請輸入Email">
       <div class="button-group">
         <button @click="cancelChanges">取消</button>
@@ -109,10 +107,23 @@ export default {
     },
     formatDate(value) {
       if (!value) return '';
-      // 將 ISO 8601 格式的日期轉換為 Date 對象
-      const dateObj = new Date(value);
-      // 使用 Date 對象的方法來獲取 YYYY-MM-DD 格式的日期
-      return dateObj.toISOString().split('T')[0];
+      // 創建 Date 對象
+    const dateObj = new Date(value);
+    
+    // 取得台灣時區的偏移量
+    const taiwanOffset = 8 * 60; // 台灣時區相對於 UTC 的偏移量 (8小時 = 480分鐘)
+    const localOffset = dateObj.getTimezoneOffset(); // 當前時區的偏移量
+    const offset = taiwanOffset - localOffset;
+
+    // 計算台灣時區的日期
+    const taiwanDateObj = new Date(dateObj.getTime() + offset * 60 * 1000);
+
+    // 格式化為 YYYY-MM-DD 格式
+    const year = taiwanDateObj.getFullYear();
+    const month = String(taiwanDateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(taiwanDateObj.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
     },
     goBack() {
       this.$router.go(-1); // 返回上一頁
