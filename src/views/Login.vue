@@ -1,26 +1,29 @@
 <template>
   <div class="login">
     <div class="login-form">
-      <h5 class="room-title">會員登入</h5> <!-- 登入頁面標題 -->
-      <form @submit.prevent="handleSubmit"> <!-- 登入表單，防止默認提交 -->
+      <h5 class="room-title">會員登入</h5>
+      <form @submit.prevent="handleSubmit">
         <div class="input-group">
-          <label for="idNumber">身分證字號：</label> <!-- 身分證字號標籤 -->
-          <input v-model="idNumber" type="text" id="idNumber" required autocomplete="username" /> <!-- 輸入身分證字號 -->
+          <label for="idNumber">身分證字號：</label>
+          <input v-model="idNumber" type="text" id="idNumber" required autocomplete="username" />
         </div>
         <div class="input-group">
-          <label for="password">密碼：</label> <!-- 密碼標籤 -->
+          <label for="password">密碼：</label>
           <input v-model="password" type="password" id="password" required autocomplete="current-password" />
-          <!-- 輸入密碼 -->
         </div>
-
-
-        <button type="submit">登入</button> <!-- 登入按鈕 -->
+        <div class="input-group">
+          <label for="captcha">驗證碼：</label>
+          <div id="captcha">{{ captchaCode }}</div>
+          <input v-model="captchaInput" type="text" id="captcha" required placeholder="請輸入驗證碼" />
+          <button type="button" @click="generateCaptcha">生成驗證碼</button>
+        </div>
+        <button type="submit">登入</button>
         <div class="links">
-          <router-link to="/forgot-password">忘記密碼</router-link> <!-- 到忘記密碼頁面的連結 -->
-          <router-link to="/register">加入會員</router-link> <!-- 到註冊頁面的連結 -->
+          <router-link to="/forgot-password">忘記密碼</router-link>
+          <router-link to="/register">加入會員</router-link>
         </div>
       </form>
-      <p v-if="message">{{ message }}</p> <!-- 顯示登入結果訊息 -->
+      <p v-if="message">{{ message }}</p>
     </div>
   </div>
 </template>
@@ -31,11 +34,21 @@ export default {
     return {
       idNumber: '',
       password: '',
+      captchaCode: '',
+      captchaInput: '',
       message: ''
     };
   },
   methods: {
+    generateCaptcha() {
+      this.captchaCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+    },
     async handleSubmit() {
+      if (this.captchaInput !== this.captchaCode) {
+        this.message = '驗證碼錯誤！';
+        return;
+      }
+      
       try {
         const response = await fetch('/ktv-app/api/login', {
           method: 'POST',
@@ -50,17 +63,12 @@ export default {
           console.log('登入成功');  // F12 顯示成功訊息
           this.message = '登入成功!';
 
-          // 保存 ID Number 和其他登入資訊到 sessionStorage
           sessionStorage.setItem('idNumber', this.idNumber);
           sessionStorage.setItem('token', data.token); // 使用從後端獲取的實際 token
 
-          // 保存 ID Number 到 Vuex Store（確保已經在 store 中定義了相應的 mutation 或 action）
           this.$store.commit('setIdNumber', this.idNumber);
-
-          // 如果需要，可以在這裡調用方法來獲取會員資料
           await this.$store.dispatch('fetchMemberProfile');
 
-          // 重定向到會員頁面
           this.$router.push('/member');
         } else {
           const errorData = await response.text();
@@ -71,6 +79,9 @@ export default {
         this.message = '發生錯誤';
       }
     }
+  },
+  created() {
+    this.generateCaptcha(); // 初始化驗證碼
   }
 };
 </script>
