@@ -21,7 +21,7 @@
           <div class="footer-right">
           <ul>
           <li><a href="/room">包廂介紹</a></li>
-            <li><a href="/members">會員專區</a></li>
+            <li><a href="/member">會員專區</a></li>
             <li><a href="/booking">線上訂位</a></li>
           </ul>
         </div>

@@ -31,7 +31,7 @@
       </form>
       <p v-if="message">{{ message }}</p>
       <div class="links">
-        <router-link to="/login">返回登入</router-link>
+        <router-link to="/login" style="color: white;">返回登入</router-link>
       </div>
     </div>
   </div>
